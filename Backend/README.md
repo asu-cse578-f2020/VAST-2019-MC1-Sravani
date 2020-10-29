@@ -20,10 +20,15 @@ GET requests:
 
 To get the mean damage for a particular category:
 http://localhost:5000/damage/mean/shake_intensity
+
 http://localhost:5000/damage/mean/medical
+
 http://localhost:5000/damage/mean/power
+
 http://localhost:5000/damage/mean/buildings
+
 http://localhost:5000/damage/mean/sewer_and_water
+
 http://localhost:5000/damage/mean/roads_and_bridges
 
 Use the above urls in the http requests from the js files
