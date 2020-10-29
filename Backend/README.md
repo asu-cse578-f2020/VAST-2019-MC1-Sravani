@@ -19,6 +19,7 @@ This command will start the backend server on the port 5000
 GET requests:
 
 To get the mean damage for a particular category:
+
 http://localhost:5000/damage/mean/shake_intensity
 
 http://localhost:5000/damage/mean/medical
