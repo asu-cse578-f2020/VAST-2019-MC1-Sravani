@@ -1,0 +1,97 @@
+[
+  {
+    "x": 2,
+    "y": 0,
+    "enName": "Palace Hills"
+  },
+  {
+    "x": 3,
+    "y": 0,
+    "enName": "NorthWest"
+  },
+  {
+    "x": 4,
+    "y": 0,
+    "enName": "Old Town"
+  },
+  {
+    "x": 6,
+    "y": 1,
+    "enName": "Safe Town"
+  },
+  {
+    "x": 2,
+    "y": 2,
+    "enName": "Southwest"
+  },
+  {
+    "x": 3,
+    "y": 1,
+    "enName": "Down-town"
+  },
+  {
+    "x": 8,
+    "y": 2,
+    "enName": "Wilson Forest"
+  },
+  {
+    "x": 7,
+    "y": 4,
+    "enName": "Scenic Vista"
+  },
+  {
+    "x": 4,
+    "y": 4,
+    "enName": "Broadview"
+  },
+  {
+    "x": 5,
+    "y": 4,
+    "enName": "Chapparel"
+  },
+  {
+    "x": 7,
+    "y": 3,
+    "enName": "Terrapin Springs"
+  },
+  {
+    "x": 7,
+    "y": 2,
+    "enName": "Pepper Mill"
+  },
+  {
+    "x": 6,
+    "y": 2,
+    "enName": "Cheddar-ford"
+  },
+  {
+    "x": 5,
+    "y": 1,
+    "enName": "Easton"
+  },
+  {
+    "x": 4,
+    "y": 1,
+    "enName": "Weston"
+  },
+  {
+    "x": 3,
+    "y": 2,
+    "enName": "Southton"
+  },
+  {
+    "x": 4,
+    "y": 3,
+    "enName": "Oak Willow"
+  },
+  {
+    "x": 5,
+    "y": 2,
+    "enName": "East Parton"
+  },
+  {
+    "x": 4,
+    "y": 2,
+    "enName": "West Parton"
+  }
+]
