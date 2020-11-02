@@ -1,6 +1,5 @@
 
 var gridMapSvg;
-
 var mapData;
 var timeData;
 
@@ -54,7 +53,7 @@ function drawGridMap() {
           })
           .style("fill", (d) => {
             let val = +Math.floor(Math.random() * (10 - 0 + 1)) + 0;
-            console.log(val, colorScale(val));
+            // console.log(val, colorScale(val));
             return colorScale(val);
           })
           .style("stroke", "black")

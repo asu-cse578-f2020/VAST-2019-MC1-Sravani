@@ -1,4 +1,3 @@
-
 var mapSvg;
 var mapData;
 var timeData;
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
   ]).then(function (values) {
     mapData = values[0];
     topoData = topojson.feature(mapData, mapData.objects.StHimark);
-    topoData1 = values[1];
     drawMap();
   });
 
@@ -62,5 +60,3 @@ function drawMap() {
     });
 
 }
-
-
