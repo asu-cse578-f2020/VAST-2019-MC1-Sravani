@@ -1,5 +1,5 @@
 
-import {convertDateToTimeStamp} from './utils.js';
+import { convertDateToTimeStamp } from './utils.js';
 var densityChartSvg;
 var densityChartData;
 
@@ -22,12 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
       densityChartData = values[0];
       drawDensityChart(densityChartData);
     })
+
+  fetch("http://localhost:5000/damage/entropy/power/'2020-04-06 00:35:00'/'2020-04-06 23:40:00'")
+    .then((response) => {
+      response.json().then(function (data) {
+        console.log("IMPP", data);
+      });
+    })
 });
 
 
 // Draw the densityChart in the #densityChart svg
 function drawDensityChart(densityChartData) {
-   console.log(convertDateToTimeStamp(new Date('2020-04-06 00:35:00')));
+  console.log(convertDateToTimeStamp(new Date('2020-04-06 00:35:00')));
   // add the x Axis
   var x = d3.scaleLinear()
     .domain([0, 1000])
