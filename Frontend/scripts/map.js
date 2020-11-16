@@ -3,10 +3,9 @@ var mapData;
 var timeData;
 var topoData;
 
-
 // This runs when the page is loaded
-document.addEventListener('DOMContentLoaded', function () {
-  mapSvg = d3.select('#map');
+document.addEventListener("DOMContentLoaded", function () {
+  mapSvg = d3.select("#map");
 
   // Load both files before doing anything else
   Promise.all([
@@ -15,15 +14,15 @@ document.addEventListener('DOMContentLoaded', function () {
   ]).then(function (values) {
     mapData = values[0];
     topoData = topojson.feature(mapData, mapData.objects.StHimark);
-    drawMap();
+    Promise.all([getMeanData(), getEntropyData()]).then(function () {
+      drawMap();
+    });
   });
-
 });
-
 
 // Draw the map in the #map svg
 function drawMap() {
-  console.log("topoData", topoData);
+  console.log("powerMean", powerMean, powerEntropy);
   topoData.features.forEach(function (d) {
     d.val = +Math.floor(Math.random() * (10 - 0 + 1)) + 0;
   });
@@ -48,15 +47,16 @@ function drawMap() {
       return d.properties.Id;
     })
     .attr("fill", (d) => {
-      let val = +Math.floor(Math.random() * (10 - 0 + 1)) + 0;
-      console.log(val, colorScale(val));
+      //let val = +Math.floor(Math.random() * (10 - 0 + 1)) + 0;
+      let val = powerMean[d.properties.Id - 1];
+      //console.log(val, colorScale(val));
       return colorScale(val);
     })
     .attr("stroke", "black")
     .attr("stroke-width", (d) => {
-      if (d.val >= 0 && d.val <= 3) return 0.5;
-      if (d.val >= 4 && d.val <= 7) return 2;
-      if (d.val >= 8 && d.val <= 10) return 4;
+      entropyVal = powerMean[d.properties.Id - 1];
+      if (entropyVal >= 0 && entropyVal <= 3) return 0.5;
+      if (entropyVal >= 4 && entropyVal <= 7) return 2;
+      if (entropyVal >= 8 && entropyVal <= 10) return 4;
     });
-
 }
