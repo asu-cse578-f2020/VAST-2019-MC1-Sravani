@@ -29,7 +29,7 @@ function drawMap() {
   // create the map projection and geoPath
   let projection = d3
     .geoMercator()
-    .scale(129000)
+    .scale(100000)
     .center(d3.geoCentroid(topoData))
     .translate([
       +mapSvg.style("width").replace("px", "") / 2,
@@ -54,10 +54,9 @@ function drawMap() {
     })
     .attr("stroke", "black")
     .attr("stroke-width", (d) => {
-      entropyVal = powerEntropy[d.properties.Id - 1];
-      console.log(entropyVal);
-      if (entropyVal >= 0 && entropyVal <= 0.3) return 4;
-      if (entropyVal >= 0.4 && entropyVal <= 0.7) return 2;
-      if (entropyVal >= 0.8) return 0.5;
+      entropyVal = powerMean[d.properties.Id - 1];
+      if (entropyVal >= 0 && entropyVal <= 3) return 0.5;
+      if (entropyVal >= 4 && entropyVal <= 7) return 2;
+      if (entropyVal >= 8 && entropyVal <= 10) return 4;
     });
 }
