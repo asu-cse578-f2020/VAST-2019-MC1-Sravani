@@ -1,5 +1,5 @@
 
-import { convertDateToTimeStamp } from './utils.js';
+import { convertDateToTimeStamp, getDataForAllCategories } from './utils.js';
 var densityChartSvg;
 var densityChartData;
 
@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Draw the densityChart in the #densityChart svg
 function drawDensityChart(densityChartData) {
+
+  getDataForAllCategories('2020-04-06 00:35:00','2020-04-06 23:40:00');
   console.log(convertDateToTimeStamp(new Date('2020-04-06 00:35:00')));
   // add the x Axis
   var x = d3.scaleLinear()
