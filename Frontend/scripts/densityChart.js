@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Draw the densityChart in the #densityChart svg
 function drawDensityChart(densityChartData) {
 
-  getDataForAllCategories('2020-04-06 00:35:00','2020-04-06 23:40:00');
+  getDataForAllCategories('2020-04-06 00:35:00', '2020-04-06 23:40:00').then(data => console.log("heree1", data));
   console.log(convertDateToTimeStamp(new Date('2020-04-06 00:35:00')));
   // add the x Axis
   var x = d3.scaleLinear()
