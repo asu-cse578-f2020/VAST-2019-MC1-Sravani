@@ -44,6 +44,10 @@ to get entropy for a particular interval:
 http://localhost:5000/damage/entropy/<string:category>/<string:timestamp1>/<string:timestamp2>
 
 
+to get mean for all categories for a particular interval:
+http://localhost:5000/damage/mean/allcategories/<string:timestamp1>/<string:timestamp2>
+
+
 timestamp is a string in the format 'YYYY-MM-DD HH:MM:SS'. For example, '2020-04-06 00:35:00'
 
 Ex: http://localhost:5000/damage/entropy/power/'2020-04-06 00:35:00'/'2020-04-06 23:40:00'
