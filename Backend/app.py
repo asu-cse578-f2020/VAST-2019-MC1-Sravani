@@ -1,6 +1,6 @@
 from flask import Flask
 import pandas as pd
-from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category
+from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage
 
 app = Flask(__name__)
 
@@ -40,6 +40,12 @@ def entropy_by_category_for_time_period(category, time1, time2):
     entropy = entropy.to_json(orient='records')
     return entropy
 
+@app.route('/damage/mean/allcategories/<string:time1>/<string:time2>', methods=['GET'])
+def damage_for_all_categories_for_time_period(time1, time2):
+    damage_for_all_categories_for_timeframe = get_damage(time1, time2)
+    damage = pd.DataFrame(damage_for_all_categories_for_timeframe)
+    damage = damage.to_json(orient='records')
+    return damage
 
 if __name__ == '__main__':
     app.debug = True
