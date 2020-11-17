@@ -81,3 +81,22 @@ def get_entropy_by_category(category, t1, t2):
 
     df = pd.DataFrame(locations_timelyAverage)
     return df
+
+def get_damage(t1,t2):
+    mask = (nba['time'] >= t1) & (nba['time'] <= t2)
+    temp = nba.loc[mask]
+    categories=['sewer_and_water','power','roads_and_bridges','medical','buildings','shake_intensity']
+    nba_location=temp.groupby(temp.location,as_index=False)
+    all_categories=0*[6]
+    locations=0*[19]
+    locations_timelyAverage=0*[19]    
+    for group_name,location in nba_location:
+        for category in categories:
+            temp_category=nba_location.get_group(group_name).dropna(subset=[category])
+            locations_timelyAverage.append([group_name,category,temp_category[category].mean()])
+            #all_categories.append([category,locations_timelyAverage])
+            print(locations_timelyAverage)
+            df=pd.DataFrame(locations_timelyAverage)
+            
+    # df.to_excel('AllCategories_danger.xlsx')
+    return df
