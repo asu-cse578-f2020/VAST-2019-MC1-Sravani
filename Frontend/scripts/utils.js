@@ -4,19 +4,14 @@ export function convertDateToTimeStamp(date) {
     return date_format_str;
 }
 
-export function getDataForAllCategories(timestamp1, timestamp2) {
-    fetch(`http://localhost:5000/damage/mean/allcategories/${timestamp1}/${timestamp2}`)
-        .then((response) => {
-            response.json().then(function (data) {
-                let temp0 = data.reduce((ans, val) => {
-                    return { ...ans, [val['0']]: {} };
-                }, {})
-                data.forEach(val => {
-                    //   temp = temp0[val[0]]
-                    temp0[val[0]][val[1]] = val[2]
-                })
-                console.log("HERE", temp0);
-            });
-        })
-
+export async function getDataForAllCategories(timestamp1, timestamp2) {
+    let response = await fetch(`http://localhost:5000/damage/mean/allcategories/${timestamp1}/${timestamp2}`);
+    let data = await response.json();
+    let res = data.reduce((ans, val) => {
+        return { ...ans, [val['0']]: {} };
+    }, {})
+    data.forEach(val => {
+        res[val[0]][val[1]] = val[2]
+    })
+    return res;
 }
