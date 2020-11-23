@@ -26,12 +26,12 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-6 gridcol">
-          <button id="map-power" type="button" class="btn btn-outline-primary">Power</button> 
-          <button id="map-buildings" type="button" class="btn btn-outline-primary">Buildings</button> 
-          <button id="map-medical" type="button" class="btn btn-outline-primary">Medical</button> 
-          <button id="map-shake" type="button" class="btn btn-outline-primary">Shake</button> 
-          <button id="map-sewer" type="button" class="btn btn-outline-primary">Sewer</button> 
-          <button id="map-roads" type="button" class="btn btn-outline-primary">Roads</button>  
+          <button id="map-power" type="button" class="btn btn-outline-primary" onclick="drawMap('power')">Power</button> 
+          <button id="map-buildings" type="button" class="btn btn-outline-primary" onclick="drawMap('buildings')">Buildings</button> 
+          <button id="map-medical" type="button" class="btn btn-outline-primary" onclick="drawMap('medical')">Medical</button> 
+          <button id="map-shake" type="button" class="btn btn-outline-primary" onclick="drawMap('shake')">Shake</button> 
+          <button id="map-sewer" type="button" class="btn btn-outline-primary" onclick="drawMap('sewer')">Sewer</button> 
+          <button id="map-roads" type="button" class="btn btn-outline-primary" onclick="drawMap('roads')">Roads</button>  
           <svg id='map'></svg>
         </div>
         <div class="col-sm-6 gridcol">
