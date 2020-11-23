@@ -1,19 +1,8 @@
 from flask import Flask
 import pandas as pd
-from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage
+from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage, get_report_count
 
 app = Flask(__name__)
-
-
-@app.route('/geo-json', methods=['GET'])
-def st_himark_geo_json():
-    return {
-        "type": "Topology",
-        "arcs": [],
-        "transform": {},
-        "objects": {}
-    }
-
 
 @app.route('/damage/mean/<string:category>', methods=['GET'])
 def damage_by_category(category):
@@ -40,12 +29,22 @@ def entropy_by_category_for_time_period(category, time1, time2):
     entropy = entropy.to_json(orient='records')
     return entropy
 
+
 @app.route('/damage/mean/allcategories/<string:time1>/<string:time2>', methods=['GET'])
 def damage_for_all_categories_for_time_period(time1, time2):
     damage_for_all_categories_for_timeframe = get_damage(time1, time2)
     damage = pd.DataFrame(damage_for_all_categories_for_timeframe)
     damage = damage.to_json(orient='records')
     return damage
+
+
+@app.route('/reportcount', methods=['GET'])
+def report_count():
+    report_count = get_report_count()
+    report_count = pd.DataFrame(report_count)
+    report_count = report_count.to_json(orient='records')
+    return report_count
+
 
 if __name__ == '__main__':
     app.debug = True

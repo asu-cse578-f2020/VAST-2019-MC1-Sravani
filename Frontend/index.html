@@ -4,7 +4,8 @@
 <head>
   <meta charset='utf-8'>
   <title>Group Project</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel='stylesheet' href='css/styles.css'>
   <script src="https://unpkg.com/topojson-client@3"></script>
   <script src='https://d3js.org/d3.v5.min.js'></script>
@@ -39,18 +40,23 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6 gridcol">
-          <svg id='densitychart'></svg>
+        <div class="col-sm-12 gridcol">
+          <svg id='densitychart' style="height: 250px;"></svg>
+          <div>
+            <button id="playbtn" type="button" class="btn btn-outline-primary">Play</button>
+            <button id="pausebtn" type="button" class="btn btn-outline-primary">Pause</button>
+          </div>
         </div>
-        <div class="col-sm-6 gridcol">
+      </div>
+      <div class="row">
+        <div class="col-sm-12 gridcol">
           <svg id='linechart'></svg>
         </div>
       </div>
       <div class="row">
         <svg id='gridmap' style="height:1000px"></svg>
-      </div>      
+      </div>
     </div>
-    
   </div>
 </body>
 

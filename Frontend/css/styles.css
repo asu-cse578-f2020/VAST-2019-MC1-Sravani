@@ -34,3 +34,9 @@ h2,
 h3 {
   text-align: center;
 }
+
+
+.selected {
+  stroke: red;
+  stroke-width: 1px;
+}
