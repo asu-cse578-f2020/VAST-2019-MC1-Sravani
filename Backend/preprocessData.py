@@ -94,9 +94,13 @@ def get_damage(t1,t2):
         for category in categories:
             temp_category=nba_location.get_group(group_name).dropna(subset=[category])
             locations_timelyAverage.append([group_name,category,temp_category[category].mean()])
-            #all_categories.append([category,locations_timelyAverage])
             print(locations_timelyAverage)
             df=pd.DataFrame(locations_timelyAverage)
             
-    # df.to_excel('AllCategories_danger.xlsx')
     return df
+
+def get_report_count():
+    nba_time=nba.groupby(nba.time,as_index=False)['time'].agg(['count'])
+    nba_time['log_value'] = np.log(nba_time['count'])/np.log(11)      
+    nba_time.reset_index(level=0, inplace=True)
+    return nba_time
