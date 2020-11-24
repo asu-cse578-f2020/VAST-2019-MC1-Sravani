@@ -15,3 +15,43 @@ export async function getDataForAllCategories(timestamp1, timestamp2) {
     })
     return res;
 }
+/*
+export var globalDimension='power';
+export function setGlobalDimension(dimension){
+  globalDimension = dimension;
+  console.log("global dim set to", dimension)
+  drawMap()
+}
+*/
+export async function getMeanForGivenCategory(timestamp1, timestamp2, category) {
+    let response = await fetch(`http://localhost:5000/damage/mean/${category}/${timestamp1}/${timestamp2}`);
+    let data = await response.json();
+    let resArray = []
+    data.forEach(val => {
+        resArray[val[0]] = val[1]
+    })
+    return resArray;
+}
+export async function getEntropyForGivenCategory(timestamp1, timestamp2, category) {
+    let response = await fetch(`http://localhost:5000/damage/entropy/${category}/${timestamp1}/${timestamp2}`);
+    let data = await response.json();
+
+
+    let resArray = []
+    data.forEach(val => {
+        resArray[val[0]] = val[1]
+    })
+    return resArray;
+}
+export async function getEntropyDataForAllCategories(timestamp1, timestamp2) {
+    let response = await fetch(`http://localhost:5000/damage/entropy/allcategories/${timestamp1}/${timestamp2}`);
+    let data = await response.json();
+    let res = data.reduce((ans, val) => {
+        return { ...ans, [val['0']]: {} };
+    }, {})
+    data.forEach(val => {
+        res[val[0]][val[1]] = val[2]
+    })
+    return res;
+}
+

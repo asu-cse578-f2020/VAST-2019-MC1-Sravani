@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     values
   ) {
     mapData = values[0];
-    console.log(mapData);
+    //console.log(mapData);
     getMeanData().then(() => {
       plotMap(values[0]);
     });
@@ -54,7 +54,7 @@ function plotMap(mapLocalData) {
             if (i === 0) {
               if (j === 0) {
                 val = powerMean[k];
-                console.log(val);
+                //console.log(val);
               } else if (j === 1) {
                 val = buildingsMean[k];
               } else if (j === 2) {
