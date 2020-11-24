@@ -1,5 +1,7 @@
 
 import { convertDateToTimeStamp, getDataForAllCategories } from './utils.js';
+import {updateMapData} from './map.js'
+
 var densityChartSvg;
 var brush;
 var gBrush;
@@ -180,7 +182,7 @@ function drawDensityChart(data) {
   //     .attr("d", area);
 }
 function timeSelected(ts1, ts2) {
-  
+  updateMapData(ts1,ts2)  
 
 }
 

@@ -1,31 +1,29 @@
-
 var gridMapSvg;
 var mapData;
 var timeData;
 
-
 // This runs when the page is loaded
-document.addEventListener('DOMContentLoaded', function () {
-  gridMapSvg = d3.select('#gridmap');
+document.addEventListener("DOMContentLoaded", function () {
+  gridMapSvg = d3.select("#gridmap");
 
   // Load both files before doing anything else
-  Promise.all([d3.json("data/gridmap-layout-thailand.json")]).then(function (values) {
+  Promise.all([d3.json("data/gridmap-layout-thailand.json")]).then(function (
+    values
+  ) {
     mapData = values[0];
-    drawGridMap();
+    //console.log(mapData);
+    getMeanData().then(() => {
+      plotMap(values[0]);
+    });
   });
-
 });
 
-
-// Draw the gridMap in the #gridMap svg
-function drawGridMap() {
-
+function plotMap(mapLocalData) {
   var svg = gridMapSvg.attr("width", 600).attr("height", 600);
-
   var sEnter = svg
     .append("g")
     .selectAll("g")
-    .data(mapData)
+    .data(mapLocalData)
     .enter()
     .append("g")
     .attr("transform", function (d) {
@@ -35,7 +33,7 @@ function drawGridMap() {
   var lineGraph = d3.select("#gridmap").append("svg:svg");
   var colorScale = d3.scaleOrdinal(d3.schemeReds[3]).domain([0, 10]);
 
-  for (var k = 0; k < mapData.length; k++) {
+  for (var k = 0; k < mapLocalData.length; k++) {
     for (var i = 0; i < 6; i++) {
       for (var j = 0; j < 6; j++) {
         lineGraph
@@ -45,14 +43,30 @@ function drawGridMap() {
           .attr("transform", function (d) {
             return (
               "translate(" +
-              (150 * mapData[k].x + i * 25) +
+              (150 * mapLocalData[k].x + i * 25) +
               "," +
-              (mapData[k].y * 150 + (j + 4) * 25) +
+              (mapLocalData[k].y * 150 + (j + 4) * 25) +
               ")"
             );
           })
           .style("fill", (d) => {
-            let val = +Math.floor(Math.random() * (10 - 0 + 1)) + 0;
+            let val = 0;
+            if (i === 0) {
+              if (j === 0) {
+                val = powerMean[k];
+                //console.log(val);
+              } else if (j === 1) {
+                val = buildingsMean[k];
+              } else if (j === 2) {
+                val = medicalMean[k];
+              } else if (j === 3) {
+                val = shakeMean[k];
+              } else if (j === 4) {
+                val = sewerMean[k];
+              } else {
+                val = roadsMean[k];
+              }
+            }
             // console.log(val, colorScale(val));
             return colorScale(val);
           })
@@ -71,14 +85,12 @@ function drawGridMap() {
     .style("stroke-width", 7)
     .style("fill", function (d) {
       return "white";
-    }).attr("transform", "translate(0,100)");
+    })
+    .attr("transform", "translate(0,100)");
 
   sEnter
     .append("text")
     .attr("x", 150 / 2)
     .attr("y", 150 / 2 + 2)
     .style("text-anchor", "middle");
-
 }
-
-
