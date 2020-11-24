@@ -1,8 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 import pandas as pd
 from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage, get_report_count
 
 app = Flask(__name__)
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/damage/mean/<string:category>', methods=['GET'])
 def damage_by_category(category):
