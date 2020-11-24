@@ -4,16 +4,15 @@
 <head>
   <meta charset='utf-8'>
   <title>Group Project</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel='stylesheet' href='css/styles.css'>
   <script src="https://unpkg.com/topojson-client@3"></script>
   <script src='https://d3js.org/d3.v5.min.js'></script>
-  <script src='scripts/map.js'></script>
   <script src='scripts/api.js'></script>
   <script type="module" src='scripts/densityChart.js'></script>
   <script src='scripts/gridMap.js'></script>
   <script src='scripts/lineChart.js'></script>
+  <script src='scripts/map.js'></script>
   <script src='scripts/stackedBarChart.js'></script>
   <style>
     .tooltip {
@@ -49,13 +48,12 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-6 gridcol">
-          <button id="map-power" type="button" class="btn btn-outline-primary" >Power</button> 
-          <button id="map-buildings" type="button" class="btn btn-outline-primary" >Buildings</button> 
-          <button id="map-medical" type="button" class="btn btn-outline-primary" >Medical</button> 
-          <button id="map-shake" type="button" class="btn btn-outline-primary" >Shake</button> 
-          <button id="map-sewer" type="button" class="btn btn-outline-primary" >Sewer</button> 
-          <button id="map-roads" type="button" class="btn btn-outline-primary" >Roads</button>  
-          <div><input type='checkbox' id='cities-checkbox' onclick="setGlobalDimension('test')">Test Radio</div>
+          <button id="map-power" type="button" class="btn btn-outline-primary">Power</button> 
+          <button id="map-buildings" type="button" class="btn btn-outline-primary">Buildings</button> 
+          <button id="map-medical" type="button" class="btn btn-outline-primary">Medical</button> 
+          <button id="map-shake" type="button" class="btn btn-outline-primary">Shake</button> 
+          <button id="map-sewer" type="button" class="btn btn-outline-primary">Sewer</button> 
+          <button id="map-roads" type="button" class="btn btn-outline-primary">Roads</button>  
           <svg id='map'></svg>
         </div>
         <div class="col-sm-6 gridcol">
@@ -73,23 +71,18 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 gridcol">
-          <svg id='densitychart' style="height: 250px;"></svg>
-          <div>
-            <button id="playbtn" type="button" class="btn btn-outline-primary">Play</button>
-            <button id="pausebtn" type="button" class="btn btn-outline-primary">Pause</button>
-          </div>
+        <div class="col-sm-6 gridcol">
+          <svg id='densitychart'></svg>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 gridcol">
+        <div class="col-sm-6 gridcol">
           <svg id='linechart'></svg>
         </div>
       </div>
       <div class="row">
         <svg id='gridmap' style="height:1000px"></svg>
-      </div>
+      </div>      
     </div>
+    
   </div>
 </body>
 
