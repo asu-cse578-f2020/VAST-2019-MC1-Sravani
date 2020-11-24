@@ -1,4 +1,7 @@
-import { getMeanForGivenCategory, getEntropyForGivenCategory  } from './utils.js';
+import {
+  getMeanForGivenCategory,
+  getEntropyForGivenCategory,
+} from "./utils.js";
 var mapSvg;
 var mapData;
 var topoData;
@@ -7,28 +10,28 @@ var EntropyArray;
 var startTime;
 var EndTime;
 
-var globalDimension='power';
-function setGlobalDimension(dimension){
+var globalDimension = "power";
+function setGlobalDimension(dimension) {
   globalDimension = dimension;
   //console.log("global dim set to", dimension)
   updateMapData(startTime, EndTime);
 }
-document.getElementById("map-power").addEventListener('click', function () {
+document.getElementById("map-power").addEventListener("click", function () {
   setGlobalDimension("power");
 });
-document.getElementById("map-buildings").addEventListener('click', function () {
+document.getElementById("map-buildings").addEventListener("click", function () {
   setGlobalDimension("buildings");
 });
-document.getElementById("map-medical").addEventListener('click', function () {
+document.getElementById("map-medical").addEventListener("click", function () {
   setGlobalDimension("medical");
 });
-document.getElementById("map-shake").addEventListener('click', function () {
+document.getElementById("map-shake").addEventListener("click", function () {
   setGlobalDimension("shake_intensity");
 });
-document.getElementById("map-sewer").addEventListener('click', function () {
+document.getElementById("map-sewer").addEventListener("click", function () {
   setGlobalDimension("sewer_and_water");
 });
-document.getElementById("map-roads").addEventListener('click', function () {
+document.getElementById("map-roads").addEventListener("click", function () {
   setGlobalDimension("roads_and_bridges");
 });
 /*
@@ -63,25 +66,29 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-export function updateMapData(ts1,ts2){
+export function updateMapData(ts1, ts2) {
   startTime = ts1;
   EndTime = ts2;
   //console.log("mapupdate called")
   Promise.all([
-    getMeanForGivenCategory(ts1,ts2, globalDimension),
-    getEntropyForGivenCategory(ts1,ts2, globalDimension),
-  ]).then(function(values){
-    console.log("result is ",values[0], values[1] )
-     MeanArray = values[0];
-     EntropyArray = values[1];
-    drawMap(MeanArray, EntropyArray)
+    getMeanForGivenCategory(ts1, ts2, globalDimension),
+    getEntropyForGivenCategory(ts1, ts2, globalDimension),
+  ]).then(function (values) {
+    console.log("result is ", values[0], values[1]);
+    MeanArray = values[0];
+    EntropyArray = values[1];
+    drawMap(MeanArray, EntropyArray);
   });
 }
 
 // Draw the map in the #map svg
-export function drawMap(MapMeanArray=MeanArray, MapEntropyArray=EntropyArray) {
+export function drawMap(
+  MapMeanArray = MeanArray,
+  MapEntropyArray = EntropyArray
+) {
+  mapSvg.selectAll(".map-label").remove();
   //let checkeddimension =  d3.select('input').property('checked');
-  //console.log(globalDimension, MapMeanArray, MapEntropyArray);  
+  //console.log(globalDimension, MapMeanArray, MapEntropyArray);
   var colorScheme;
   switch (globalDimension) {
     case "power":
@@ -140,5 +147,19 @@ export function drawMap(MapMeanArray=MeanArray, MapEntropyArray=EntropyArray) {
       if (entropyVal >= 0.5 && entropyVal <= 0.7) return 3;
       if (entropyVal >= 0.8) return 0.3;
     });
-    
+  mapSvg
+    .selectAll(".map-label")
+    .data(topoData.features)
+    .enter()
+    .append("text")
+    .attr("class", function (d) {
+      return "map-label " + d.properties.Id;
+    })
+    .attr("transform", function (d) {
+      return "translate(" + path.centroid(d) + ")";
+    })
+    .attr("dy", ".15em")
+    .text(function (d) {
+      return d.properties.Id;
+    });
 }

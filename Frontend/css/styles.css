@@ -40,3 +40,10 @@ h3 {
   stroke: red;
   stroke-width: 1px;
 }
+.map-label {
+  fill: #312f2f;
+  fill-opacity: .5;
+  font-size: 16px;
+  font-weight: 300;
+  text-anchor: top;
+}
