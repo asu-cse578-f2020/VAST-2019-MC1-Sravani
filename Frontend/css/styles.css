@@ -68,3 +68,8 @@ h3 {
 .mt-10 {
   margin-top: 10px;
 }
+
+.selected-button {
+  background: #007bff;
+  color: white;
+}

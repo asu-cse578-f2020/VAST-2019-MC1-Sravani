@@ -5,8 +5,10 @@ import { updateMapData } from './map.js'
 var densityChartSvg;
 var brush;
 var gBrush;
+let brushFlag = 0;
 let interval;
 let brushMinExtent, brushMaxExtent;
+let brushExtentDiff;
 var margin = { top: 30, right: 30, bottom: 30, left: 50 },
   width = 900 - margin.left - margin.right,
   height = 120 - margin.top - margin.bottom;
@@ -28,48 +30,33 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 });
 
-
 document.getElementById("playbtn").addEventListener('click', function () {
+  document.getElementById("playbtn").classList.add('selected-button');
+  document.getElementById("pausebtn").classList.remove('selected-button');
   playClicked();
 });
 
 document.getElementById("pausebtn").addEventListener('click', function () {
+  document.getElementById("playbtn").classList.remove('selected-button');
+  document.getElementById("pausebtn").classList.add('selected-button');
   pauseClicked();
 });
 
-// let i = 0;
 function playClicked() {
-  // console.log("p", d3.event.selection);
-  // console.log(gBrush.extent)
-  // console.log("Play Clicked", brush.extent()[1], brush.extent()[0]);
-  // brush.extent([270.0185185185185, 491.28703703703707]);
-
-
   interval = setInterval(() => {
-
     if (brushMinExtent <= 1070 && brushMaxExtent <= 1070) {
+      brushFlag = 1;
       gBrush.call(brush.move, [brushMinExtent + 10, brushMaxExtent + 10]);
-      // i++;
     }
     else {
-      // i = 0;
       brushMinExtent = 100;
-      brushMaxExtent = 250;
+      brushMaxExtent = 100 + brushExtentDiff;
+      brushFlag = 1;
+      gBrush.call(brush.move, [brushMinExtent, brushMaxExtent]);
     }
-
-  }, 500)
-
-
-  // for (let i = 1; i <= 100; i++) {
-  //   setTimeout(() => {
-  //     gBrush.call(brush.move, [270.0185185185185 + (i * 10), 491.28703703703707 + (i * 10)]);
-  //     // }
-  //   }, 3000);
-  // }
-
-
-
+  }, 2000);
 }
+
 
 function pauseClicked() {
   clearInterval(interval);
@@ -79,6 +66,7 @@ function pauseClicked() {
 // Draw the densityChart in the #densityChart svg
 function drawDensityChart(data) {
   let values = data.map(val => ({ time: val.time, log_val: val.log_value }));
+
   // Add X axis 
   var x = d3.scaleLinear()
     .domain(d3.extent(values, function (d) { return d.time; }))
@@ -95,19 +83,10 @@ function drawDensityChart(data) {
     .attr("transform", "translate(100,150)")
     .call(d3.axisLeft(y));
 
-
   brush = d3.brushX()
     .extent([[100, 50], [width + 250, height + 150]])
     .on("end", brushmoved);
 
-  // let curve = d3.curveLinear;
-  // let area = d3.area()
-  // .curve(curve)
-  // .x(d => x(d.time))
-  // .y0(y(0))
-  // .y1(d => y(d.log_val))
-
-  // Add the line
   let lines = densityChartSvg.append("path")
     .attr("transform", "translate(100,150)")
     .datum(values)
@@ -115,15 +94,13 @@ function drawDensityChart(data) {
     .attr("stroke", "black")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
-      .x(function (d) { return x(d.time) })
-      .y(function (d) { return y(d.log_val) })
-    )
-
+      .x(function (d) { return x(d.time); })
+      .y(function (d) { return y(d.log_val); })
+    );
 
   gBrush = densityChartSvg.append("g")
     .attr("class", "brush")
     .call(brush);
-
 
   var brushResizePath = function (d) {
     var e = +(d.type == "e"),
@@ -140,51 +117,50 @@ function drawDensityChart(data) {
     .attr("cursor", "ew-resize")
     .attr("d", brushResizePath);
 
-
-
-
-  // gBrush.call(brush.move, [1586300000000, 1586350000000].map(x));
   gBrush.call(brush.move, [100, 250]);
 
   function brushmoved() {
-    console.log("BRUSH MOVED");
+    let userSelect = false;
+    if(brushFlag == 0) {
+      // console.log("user selected time");
+      userSelect = true;
+      clearInterval(interval);
+    }
+    brushFlag = 0;
+    
+    // console.log("BRUSH MOVED");
     var s = d3.event.selection;
-    console.log("here", s);
-    brushMinExtent = s[0];
-    brushMaxExtent = s[1];
+    // console.log("here", s);
 
     if (s == null) {
       handle.attr("display", "none");
       lines.classed("selected", false);
     } else {
+      brushMinExtent = s[0];
+      brushMaxExtent = s[1];
+      brushExtentDiff = brushMaxExtent - brushMinExtent;
       var sx = s.map(x.invert);
-      // console.log("sx", sx);
       let date1 = new Date(sx[0]);
       let date2 = new Date(sx[1]);
       let ts1 = convertDateToTimeStamp(date1);
       let ts2 = convertDateToTimeStamp(date2);
+      if(userSelect) {
+        userSelectedTime(ts1,ts2);
+      }
       timeSelected(ts1, ts2);
-      console.log(ts1, ts2);
-
-
-      // console.log(lines);
-      // for(line in lines) {
-      //   line.classed("selected", function(d) { console.log(d);return s[0] <= d && d <= s[1]; });
-      // }
-      // lines.classed("selected", function(d) { console.log(d);return s[0] <= d && d <= s[1]; });
       handle.attr("display", null).attr("transform", function (d, i) { return "translate(" + [s[i], - (height - 370) / 4] + ")"; });
     }
   }
-
-  // densityChartSvg.append("path")
-  //     .datum(data)
-  //     .attr("fill", "steelblue")
-  //     .attr("d", area);
 }
+
+
 function timeSelected(ts1, ts2) {
   drawchart(ts1, ts2);
-  updateMapData(ts1, ts2)
+  updateMapData(ts1, ts2);
+}
 
+function userSelectedTime(ts1, ts2) {
+  // console.log("USER SELECTED TIME");
 }
 
 
