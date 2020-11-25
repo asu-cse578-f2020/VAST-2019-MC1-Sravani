@@ -1,30 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
 import pandas as pd
-<<<<<<< HEAD
-from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage
-from flask_cors import CORS
-
-app = Flask(__name__)
-
-CORS(app)
-
-@app.route('/geo-json', methods=['GET'])
-def st_himark_geo_json():
-    return {
-        "type": "Topology",
-        "arcs": [],
-        "transform": {},
-        "objects": {}
-    }
-
-=======
 from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage, get_report_count
 
 app = Flask(__name__)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
->>>>>>> 1c3eddaa04ef644f3a3acc1a601d17546eb449dc
 
 @app.route('/damage/mean/<string:category>', methods=['GET'])
 def damage_by_category(category):

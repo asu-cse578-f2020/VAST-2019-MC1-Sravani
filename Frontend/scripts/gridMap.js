@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     values
   ) {
     mapData = values[0];
-    plotMap("2020-04-06 00:35:00", "2020-04-06 06:35:00");
   });
 });
 
@@ -22,7 +21,7 @@ function getDateDiff(date1, date2) {
   return difference / 6;
 }
 
-function plotMap(startInterval, endInterval) {
+export function plotGridMap(startInterval, endInterval) {
   var dateDiff = getDateDiff(startInterval, endInterval);
   var timeStamp1 = Date.parse(startInterval, "YYYY-MM-DD HH:mm:ss");
 
@@ -105,13 +104,35 @@ function plotMap(startInterval, endInterval) {
     }, i * 1000);
   }
 
+  for (let i = 0; i < mapData.length; i++) {
+    svg
+      .append("line")
+      .style("stroke", "black")
+      .style("stroke-width", 4)
+      .attr("x1", 150 * mapData[i].x + 150)
+      .attr("y1", 150 * mapData[i].y + 100)
+      .attr("x2", 150 * mapData[i].x + 150)
+      .attr("y2", 150 * mapData[i].y + 250);
+  }
+
+  for (let w = 0; w < mapData.length; w++) {
+    svg
+      .append("line")
+      .style("stroke", "black")
+      .style("stroke-width", 4)
+      .attr("x1", 150 * mapData[w].x)
+      .attr("y1", 150 * mapData[w].y + 250)
+      .attr("x2", 150 * mapData[w].x + 150)
+      .attr("y2", 150 * mapData[w].y + 250);
+  }
+
   sEnter
     .append("rect")
     .attr("width", 150)
     .attr("height", 150)
     .attr("vector-effect", "non-scaling-stroke")
     .style("stroke", "black")
-    .style("stroke-width", 7)
+    .style("stroke-width", 6)
     .style("fill", function (d) {
       return "white";
     })
