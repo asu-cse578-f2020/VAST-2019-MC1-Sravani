@@ -1,29 +1,44 @@
+import { getDataForAllCategories } from "./utils.js";
 var gridMapSvg;
 var mapData;
-var timeData;
 
 // This runs when the page is loaded
 document.addEventListener("DOMContentLoaded", function () {
   gridMapSvg = d3.select("#gridmap");
 
   // Load both files before doing anything else
-  Promise.all([d3.json("data/gridmap-layout-thailand.json")]).then(function (
+  Promise.all([d3.json("data/gridmap-layout-stHimark.json")]).then(function (
     values
   ) {
     mapData = values[0];
-    console.log(mapData);
-    getMeanData().then(() => {
-      plotMap(values[0]);
-    });
+    plotMap("2020-04-06 00:35:00", "2020-04-06 06:35:00");
   });
 });
 
-function plotMap(mapLocalData) {
+function getDateDiff(date1, date2) {
+  var timeStamp1 = Date.parse(date1, "YYYY-MM-DD HH:mm:ss");
+  var timeStamp2 = Date.parse(date2, "YYYY-MM-DD HH:mm:ss");
+  var difference = timeStamp2 - timeStamp1;
+  return difference / 6;
+}
+
+function plotMap(startInterval, endInterval) {
+  var dateDiff = getDateDiff(startInterval, endInterval);
+  var timeStamp1 = Date.parse(startInterval, "YYYY-MM-DD HH:mm:ss");
+
   var svg = gridMapSvg.attr("width", 600).attr("height", 600);
+  let damageArray = [
+    "power",
+    "buildings",
+    "medical",
+    "shake_intensity",
+    "sewer_and_water",
+    "roads_and_bridges",
+  ];
   var sEnter = svg
     .append("g")
     .selectAll("g")
-    .data(mapLocalData)
+    .data(mapData)
     .enter()
     .append("g")
     .attr("transform", function (d) {
@@ -31,49 +46,63 @@ function plotMap(mapLocalData) {
     });
 
   var lineGraph = d3.select("#gridmap").append("svg:svg");
-  var colorScale = d3.scaleOrdinal(d3.schemeReds[3]).domain([0, 10]);
+  var colorScale = d3.scaleLinear().domain([0, 10]).range(["white", "maroon"]);
 
-  for (var k = 0; k < mapLocalData.length; k++) {
-    for (var i = 0; i < 6; i++) {
-      for (var j = 0; j < 6; j++) {
-        lineGraph
-          .append("svg:rect")
-          .attr("width", 25)
-          .attr("height", 25)
-          .attr("transform", function (d) {
-            return (
-              "translate(" +
-              (150 * mapLocalData[k].x + i * 25) +
-              "," +
-              (mapLocalData[k].y * 150 + (j + 4) * 25) +
-              ")"
-            );
-          })
-          .style("fill", (d) => {
-            let val = 0;
-            if (i === 0) {
-              if (j === 0) {
-                val = powerMean[k];
-                console.log(val);
-              } else if (j === 1) {
-                val = buildingsMean[k];
-              } else if (j === 2) {
-                val = medicalMean[k];
-              } else if (j === 3) {
-                val = shakeMean[k];
-              } else if (j === 4) {
-                val = sewerMean[k];
-              } else {
-                val = roadsMean[k];
-              }
+  for (let i = 0; i < 6; i++) {
+    setTimeout(function timer() {
+      let changedTimestamp1 = moment(timeStamp1 + dateDiff * i).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      let changedTimestamp2 = moment(timeStamp1 + dateDiff * (i + 1)).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+
+      getDataForAllCategories(changedTimestamp1, changedTimestamp2).then(
+        (data) => {
+          console.log(data);
+          for (var k = 0; k < mapData.length; k++) {
+            for (var j = 0; j < 6; j++) {
+              console.log(
+                i +
+                  "  " +
+                  j +
+                  "  " +
+                  changedTimestamp1 +
+                  "  " +
+                  changedTimestamp2
+              );
+              lineGraph
+                .append("svg:rect")
+                .attr("width", 25)
+                .attr("height", 25)
+                .attr("transform", function (d) {
+                  return (
+                    "translate(" +
+                    (150 * mapData[k].x + i * 25) +
+                    "," +
+                    (mapData[k].y * 150 + (j + 4) * 25) +
+                    ")"
+                  );
+                })
+                .style("fill", (d) => {
+                  let damage = damageArray[j];
+                  let strk = (k + 1).toString();
+                  if (data[strk]) {
+                    if (data[strk][damage] == null) {
+                      return colorScale(0);
+                    }
+                    return colorScale(data[strk][damage]);
+                  } else {
+                    return colorScale(0);
+                  }
+                })
+                .style("stroke", "black")
+                .style("stroke-width", 0.5);
             }
-            // console.log(val, colorScale(val));
-            return colorScale(val);
-          })
-          .style("stroke", "black")
-          .style("stroke-width", 0.5);
-      }
-    }
+          }
+        }
+      );
+    }, i * 1000);
   }
 
   sEnter
