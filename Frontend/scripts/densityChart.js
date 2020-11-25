@@ -124,6 +124,8 @@ function drawDensityChart(data) {
     if(brushFlag == 0) {
       // console.log("user selected time");
       userSelect = true;
+      document.getElementById("playbtn").classList.remove('selected-button');
+      document.getElementById("pausebtn").classList.remove('selected-button');
       clearInterval(interval);
     }
     brushFlag = 0;
