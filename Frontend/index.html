@@ -16,11 +16,11 @@
       src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"
       type="text/javascript"
     ></script>
+    <script src="scripts/map.js"></script>
     <script src="scripts/api.js"></script>
     <script type="module" src="scripts/densityChart.js"></script>
-    <script type="module" src="scripts/gridMap.js"></script>
+    <script src="scripts/gridMap.js"></script>
     <script src="scripts/lineChart.js"></script>
-    <script type="module" src="scripts/map.js"></script>
     <script src="scripts/stackedBarChart.js"></script>
   </head>
 
@@ -75,6 +75,13 @@
             >
               Roads
             </button>
+            <div>
+              <input
+                type="checkbox"
+                id="cities-checkbox"
+                onclick="setGlobalDimension('test')"
+              />Test Radio
+            </div>
             <svg id="map"></svg>
           </div>
           <div class="col-sm-6 gridcol">
@@ -82,33 +89,35 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-6 gridcol">
-            <svg id="densitychart"></svg>
+          <div class="col-sm-12 gridcol">
+            <svg id="densitychart" style="height: 250px"></svg>
+            <div>
+              <button
+                id="playbtn"
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Play
+              </button>
+              <button
+                id="pausebtn"
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Pause
+              </button>
+            </div>
           </div>
-          <div class="col-sm-6 gridcol">
+        </div>
+        <div class="row">
+          <div class="col-sm-12 gridcol">
             <svg id="linechart"></svg>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 gridcol">
-          <svg id='densitychart' style="height: 250px;"></svg>
-          <div>
-            <button id="playbtn" type="button" class="btn btn-outline-primary">Play</button>
-            <button id="pausebtn" type="button" class="btn btn-outline-primary">Pause</button>
-          </div>
+        <div class="row">
+          <svg id="gridmap" style="height: 1000px"></svg>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 gridcol">
-          <svg id='linechart'></svg>
-        </div>
-      </div>
-      <div class="row">
-        <svg id='gridmap' style="height:1000px"></svg>
       </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>
