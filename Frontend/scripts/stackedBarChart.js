@@ -29,30 +29,17 @@ async function getDataForAllCategories(timestamp1, timestamp2) {
 
 // This runs when the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
-  // Load both files before doing anything else
-  // Promise.all([d3.json('data/africa.geojson'),
-  // d3.csv('data/africa_gdp_per_capita.csv')])
-  //   .then(function (values) {
 
-  //     stackedBarChartData = values[0];
-  //     timeData = values[1];
+  svg = d3.select('#stackedbarchart')
+  svg.attr("width", (width + margin.left + margin.right))
+    .attr("height", height + margin.top + margin.bottom);
 
-  //     drawStackedBarChart();
-  //   })
-
-  // getDataForAllCategories('2020-04-06 00:35:00', '2020-04-06 23:40:00').then(data => {
-  //   for(let key in data){
-  //     stackedBarChartData.push(data[key])
-  //   }
-  //   drawStackedBarChart(stackedBarChartData);
-  // });
-  // drawchart('2020-04-06 00:35:00', '2020-04-06 23:40:00');
 });
 
 
 function drawchart(t1, t2) {
-  stackedBarChartData = [];
   getDataForAllCategories(t1, t2).then(data => {
+    stackedBarChartData=[];
     for (let key in data) {
       stackedBarChartData.push(data[key])
     }
@@ -66,13 +53,6 @@ function drawchart(t1, t2) {
 function drawStackedBarChart(data) {
   data = data.sort((a, b) => { return b.total - a.total });
   data = data.slice(0, 6)
-  svg = d3.select('#stackedbarchart')
-  svg.attr("width", (width + margin.left + margin.right))
-    .attr("height", height + margin.top + margin.bottom);
-  // let legend = svg.append(g)
-  //   .attr("transform", `translate(${margin.left},${0})`)
-
-  //   legend.append("circle").attr("cx",400).attr("cy",30).attr("r", 6).style("fill", "#69b3a2")
   var y = d3.scaleBand()			// x = d3.scaleBand()	
     .domain(data.map(function a(d) {
       return d.total_country;
@@ -91,30 +71,37 @@ function drawStackedBarChart(data) {
     .scaleOrdinal()
     .domain(function (data) { return data.columns.slice(0, 5) })
     .range(["#44a2c2", "#eb4034", "#e0c71f", "#a2c7fa", "#4346f7", "#875133",]);
+
+  svg.select('.yaxis').remove();
+  svg.select('.xaxis').remove();
+  svg.select('.ylabel').remove();
+  svg.select('.xlabel').remove();
   // y-axis
   svg.append("g")
-    .attr("transform", `translate(${margin.left},40)`)
-    .attr("class", "y-axis")
+    .attr("transform", `translate(${margin.left},130)`)
+    .attr("class", "yaxis")
     .call(d3.axisLeft(y).tickSize(`10`));
 
   svg.append("text")
+    .attr("class","ylabel")
     .attr("transform", "rotate(-90)")
     .attr("y", 0)
-    .attr("x", 0 - (height / 1.5))
+    .attr("x", 0 - (height / 1))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .text("Countries");
 
   // x-axis
   svg.append("g")
-    .attr("transform", `translate(${margin.left},${1.318 * height})`)
-    .attr("class", "x-axis")
+    .attr("transform", `translate(${margin.left},${1.582* height})`)
+    .attr("class", "xaxis")
     .call(d3.axisBottom(x).tickSize(`10`));
 
   svg.append("text")
+  .attr("class","xlabel")
     .attr("transform",
       "translate(" + (width / 1.5) + " ," +
-      (height + margin.top + 120) + ")")
+      (1.3*height + margin.top + 120) + ")")
     .style("text-anchor", "middle")
     .text("Intensities");
 
@@ -126,23 +113,23 @@ function drawStackedBarChart(data) {
   let legend = svg.append('g')
     .attr("transform", `translate(${margin.left},${0})`)
 
-  legend.append("circle").attr("cx", 425).attr("cy", 100).attr("r", 6).style("fill", "#eb4034")
-  legend.append("text").attr("x", 450).attr("y", 103).text('shake_intensity')
+  legend.append("circle").attr("cx", 425).attr("cy", 175).attr("r", 6).style("fill", "#eb4034")
+  legend.append("text").attr("x", 450).attr("y", 178).text('shake_intensity')
 
-  legend.append("circle").attr("cx", 425).attr("cy", 125).attr("r", 6).style("fill", "#e0c71f")
-  legend.append("text").attr("x", 450).attr("y", 128).text('medical')
+  legend.append("circle").attr("cx", 425).attr("cy", 200).attr("r", 6).style("fill", "#e0c71f")
+  legend.append("text").attr("x", 450).attr("y", 203).text('medical')
 
-  legend.append("circle").attr("cx", 425).attr("cy", 150).attr("r", 6).style("fill", "#a2c7fa")
-  legend.append("text").attr("x", 450).attr("y", 153).text('power')
+  legend.append("circle").attr("cx", 425).attr("cy", 225).attr("r", 6).style("fill", "#a2c7fa")
+  legend.append("text").attr("x", 450).attr("y", 228).text('power')
 
-  legend.append("circle").attr("cx", 425).attr("cy", 175).attr("r", 6).style("fill", "#4346f7")
-  legend.append("text").attr("x", 450).attr("y", 178).text('buildings')
+  legend.append("circle").attr("cx", 425).attr("cy", 250).attr("r", 6).style("fill", "#4346f7")
+  legend.append("text").attr("x", 450).attr("y", 253).text('buildings')
 
-  legend.append("circle").attr("cx", 425).attr("cy", 200).attr("r", 6).style("fill", "#875133")
-  legend.append("text").attr("x", 450).attr("y", 203).text('sewer_and_water')
+  legend.append("circle").attr("cx", 425).attr("cy", 275).attr("r", 6).style("fill", "#875133")
+  legend.append("text").attr("x", 450).attr("y", 278).text('sewer_and_water')
 
-  legend.append("circle").attr("cx", 425).attr("cy", 225).attr("r", 6).style("fill", "#44a2c2")
-  legend.append("text").attr("x", 450).attr("y", 228).text('roads_and_bridges')
+  legend.append("circle").attr("cx", 425).attr("cy", 300).attr("r", 6).style("fill", "#44a2c2")
+  legend.append("text").attr("x", 450).attr("y", 303).text('roads_and_bridges')
 
   var series = d3.stack().keys(["shake_intensity", "medical", "power", "buildings", "sewer_and_water", "roads_and_bridges"])(data).map(d => (d.forEach(v => v.key = d.key), d));
   svg.append("g")
@@ -157,7 +144,7 @@ function drawStackedBarChart(data) {
     .attr("x", function (d) { return x(d[0]); })			    //.attr("y", function(d) { return y(d[1]); })	
     .attr("width", function (d) { return x(d[1]) - x(d[0]); })	//.attr("height", function(d) { return y(d[0]) - y(d[1]); })
     .attr("height", 40)
-    .attr("transform", `translate(${margin.left},${margin.top + 25})`)
+    .attr("transform", `translate(${margin.left},${margin.top + 115})`)
     .style("cursor", "pointer")
     .on('mouseover', function (d, i) {
       tooltip.style('class', '.tooltip')
