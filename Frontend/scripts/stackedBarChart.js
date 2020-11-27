@@ -61,11 +61,11 @@ function drawStackedBarChart(data) {
       d3.max(data, function (d) {
         return d.total;
       }),
-    ])	
-    .rangeRound([0, 1.45 * width]);	
+    ])
+    .rangeRound([0, 1.45 * width]);
   var z = d3.scaleOrdinal()
-    .domain(function (data) { return data.columns.slice(0, 5) })
-    .range(["rgb(201,148,199)", "rgb(188,189,220)", "rgb(161,217,155)", "rgb(242,146,114)", "rgb(158,202,225)", "rgb(253,174,107)",]);
+    .domain(["power", "buildings", "medical", "shake_intensity", "sewer_and_water", "roads_and_bridges"])
+    .range(["rgb(252, 146, 114)", "rgb(158, 202, 225)", "rgb(161, 217, 155)", "rgb(188, 189, 220)", "rgb(253, 174, 107)", "rgb(201, 148, 199)"]);
 
   svg.select('.yaxis').remove();
   svg.select('.xaxis').remove();
@@ -113,17 +113,17 @@ function drawStackedBarChart(data) {
   let legend = svg.append('g')
     .attr("transform", `translate(${margin.left},${0})`)
 
-  legend.append("circle").attr("cx", 10).attr("cy", 25).attr("r", 6).style("fill", "rgb(188,189,220)");
-  legend.append("text").attr("x", 25).attr("y", 28).text('Shake Intensity');
+  legend.append("circle").attr("cx", 10).attr("cy", 25).attr("r", 6).style("fill", "rgb(252, 146, 114)");
+  legend.append("text").attr("x", 25).attr("y", 28).text('Power');
 
-  legend.append("circle").attr("cx", 225).attr("cy", 25).attr("r", 6).style("fill", "rgb(161,217,155)");
-  legend.append("text").attr("x", 240).attr("y", 28).text('Medical');
+  legend.append("circle").attr("cx", 225).attr("cy", 25).attr("r", 6).style("fill", "rgb(158,202,225)");
+  legend.append("text").attr("x", 240).attr("y", 28).text('Buildings');
 
-  legend.append("circle").attr("cx", 450).attr("cy", 25).attr("r", 6).style("fill", "#FA8072");
-  legend.append("text").attr("x", 465).attr("y", 28).text('Power');
+  legend.append("circle").attr("cx", 450).attr("cy", 25).attr("r", 6).style("fill", "rgb(161,217,155)");
+  legend.append("text").attr("x", 465).attr("y", 28).text('Medical');
 
-  legend.append("circle").attr("cx", 10).attr("cy", 60).attr("r", 6).style("fill", "rgb(158,202,225)");
-  legend.append("text").attr("x", 25).attr("y", 63).text('Buildings');
+  legend.append("circle").attr("cx", 10).attr("cy", 60).attr("r", 6).style("fill", "rgb(188,189,220)");
+  legend.append("text").attr("x", 25).attr("y", 63).text('Shake Intensity');
 
   legend.append("circle").attr("cx", 225).attr("cy", 60).attr("r", 6).style("fill", "rgb(253,174,107)");
   legend.append("text").attr("x", 240).attr("y", 63).text('Sewer and Water');
@@ -131,7 +131,7 @@ function drawStackedBarChart(data) {
   legend.append("circle").attr("cx", 450).attr("cy", 60).attr("r", 6).style("fill", "rgb(201,148,199)");
   legend.append("text").attr("x", 465).attr("y", 63).text('Roads and Bridges');
 
-  var series = d3.stack().keys(["shake_intensity", "medical", "power", "buildings", "sewer_and_water", "roads_and_bridges"])(data).map(d => (d.forEach(v => v.key = d.key), d));
+  var series = d3.stack().keys(["power", "buildings", "medical", "shake_intensity", "sewer_and_water", "roads_and_bridges"])(data).map(d => (d.forEach(v => v.key = d.key), d));
   var bar = svg.append("g")
     .selectAll("g")
     .data(series);
