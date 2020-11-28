@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_cors import CORS
 import pandas as pd
-from preprocessData import get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage, get_report_count
+from preprocessData import get_reports_n_damage_by_location, get_damage_mean_by_category, get_mean_by_category, get_entropy_by_category, get_damage, get_report_count
 
 app = Flask(__name__)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 @app.route('/damage/mean/<string:category>', methods=['GET'])
 def damage_by_category(category):
@@ -47,6 +48,16 @@ def report_count():
     report_count = pd.DataFrame(report_count)
     report_count = report_count.to_json(orient='records')
     return report_count
+
+
+@app.route('/reportcountanddamage/<int:loc>', methods=['GET'])
+def reports_n_damage(loc):
+    print(loc)
+    report_count_n_damage = get_reports_n_damage_by_location(loc)
+    report_count_n_damage = pd.DataFrame(report_count_n_damage)
+    report_count_n_damage = report_count_n_damage.to_json(orient='records')
+    print(report_count_n_damage)
+    return report_count_n_damage
 
 
 if __name__ == '__main__':

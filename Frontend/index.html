@@ -25,6 +25,7 @@
     <script src="scripts/gridMap.js"></script>
     <script src="scripts/lineChart.js"></script>
     <script src="scripts/stackedBarChart.js"></script>
+    <script type="module" src='scripts/ScatterPlot.js'></script>
   </head>
 
   <body>
@@ -105,6 +106,8 @@
                   </div>
                   <div class="modal-body">
                     <p>Modal body text goes here.</p>
+                    <svg id='scatterplot'></svg>
+
                   </div>
                 </div>
               </div>
@@ -147,11 +150,6 @@
                 Selected Time: <span id="selectedtime"></span>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 gridcol">
-            <svg id="linechart"></svg>
           </div>
         </div>
         <div class="row">

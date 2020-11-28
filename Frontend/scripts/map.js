@@ -2,6 +2,9 @@ import {
   getMeanForGivenCategory,
   getEntropyForGivenCategory,
 } from "./utils.js";
+import {
+  plotfrommap, updateData
+} from "./ScatterPlot.js";
 var mapSvg;
 var mapData;
 var topoData;
@@ -14,7 +17,7 @@ var Bridges;
 var Schools;
 var Powerplant;
 var tooltpdiv;
-var clickedCity;
+var clickedCity=7;
 
 var globalDimension = "power";
 function setGlobalDimension(dimension) {
@@ -22,23 +25,37 @@ function setGlobalDimension(dimension) {
   //console.log("global dim set to", dimension)
   updateMapData(startTime, EndTime);
 }
+export function getGlobalDimension() {
+  return globalDimension;
+}
+
+export function getClickedCity() {
+  return clickedCity;
+}
+
 document.getElementById("map-power").addEventListener("click", function () {
   setGlobalDimension("power");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-buildings").addEventListener("click", function () {
   setGlobalDimension("buildings");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-medical").addEventListener("click", function () {
   setGlobalDimension("medical");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-shake").addEventListener("click", function () {
   setGlobalDimension("shake_intensity");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-sewer").addEventListener("click", function () {
   setGlobalDimension("sewer_and_water");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-roads").addEventListener("click", function () {
   setGlobalDimension("roads_and_bridges");
+  plotfrommap(globalDimension);
 });
 
 document
@@ -212,7 +229,8 @@ export function drawMap(
     .on("click", function (d) {
       console.log("Modal Clicked");
 
-      clickedCity = d.properties.Nbrhood;
+      clickedCity = d.properties.Id;
+      updateData(clickedCity)
       Window.city = d.properties.Nbrhood;
       document.getElementsByClassName("modal-title").innerHTML = clickedCity;
       $("#myModal").modal("show");
