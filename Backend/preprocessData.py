@@ -109,7 +109,6 @@ def get_report_count():
 def get_reports_n_damage_by_location(loc):
     nba_time = nba.groupby(nba.location, as_index=False)
     location = nba_time.get_group(loc)
-    temp = location.groupby(pd.Grouper(level='time', freq='3h')).agg(power=('power', 'mean'), medical=('medical', 'mean'), sewer_and_water=(
-        'sewer_and_water', 'mean'), roads_and_bridges=('power', 'mean'), buildings=('buildings', 'mean'), shake_intensity=('shake_intensity', 'mean'), count=('time', 'count'))
+    temp = location.groupby(pd.Grouper(level='time', freq='3h')).agg(power=('power', 'mean'), medical=('medical', 'mean'), sewer_and_water=('sewer_and_water', 'mean'), roads_and_bridges=('roads_and_bridges', 'mean'), buildings=('buildings', 'mean'), shake_intensity=('shake_intensity', 'mean'), count=('time', 'count'))
     temp.reset_index(level=0, inplace=True)
     return temp
