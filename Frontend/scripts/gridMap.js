@@ -22,10 +22,11 @@ function getDateDiff(date1, date2) {
 }
 
 export function plotGridMap(startInterval, endInterval) {
+  console.log(startInterval, endInterval);
   var dateDiff = getDateDiff(startInterval, endInterval);
   var timeStamp1 = Date.parse(startInterval, "YYYY-MM-DD HH:mm:ss");
 
-  var svg = gridMapSvg.attr("width", 600).attr("height", 600);
+  var gridSvg = gridMapSvg.attr("width", 600).attr("height", 600);
   let damageArray = [
     "power",
     "buildings",
@@ -34,7 +35,7 @@ export function plotGridMap(startInterval, endInterval) {
     "sewer_and_water",
     "roads_and_bridges",
   ];
-  var sEnter = svg
+  var sEnter = gridSvg
     .append("g")
     .selectAll("g")
     .data(mapData)
@@ -44,59 +45,158 @@ export function plotGridMap(startInterval, endInterval) {
       return "translate(" + d.x * 150 + "," + d.y * 150 + ")";
     });
 
-  var lineGraph = d3.select("#gridmap").append("svg:svg");
+  var lineGraph = d3.select("#gridmap").append("svg");
   var colorScale = d3.scaleLinear().domain([0, 10]).range(["white", "maroon"]);
 
+  let changedTimestamps = [];
+  let index = 0;
   for (let i = 0; i < 6; i++) {
-    setTimeout(function timer() {
-      let changedTimestamp1 = moment(timeStamp1 + dateDiff * i).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-      let changedTimestamp2 = moment(timeStamp1 + dateDiff * (i + 1)).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
-
-      getDataForAllCategories(changedTimestamp1, changedTimestamp2).then(
-        (data) => {
-          console.log(data);
-          for (var k = 0; k < mapData.length; k++) {
-            for (var j = 0; j < 6; j++) {
-              lineGraph
-                .append("svg:rect")
-                .attr("width", 25)
-                .attr("height", 25)
-                .attr("transform", function (d) {
-                  return (
-                    "translate(" +
-                    (150 * mapData[k].x + i * 25) +
-                    "," +
-                    (mapData[k].y * 150 + (j + 4) * 25) +
-                    ")"
-                  );
-                })
-                .style("fill", (d) => {
-                  let damage = damageArray[j];
-                  let strk = (k + 1).toString();
-                  if (data[strk]) {
-                    if (data[strk][damage] == null) {
-                      return colorScale(0);
-                    }
-                    return colorScale(data[strk][damage]);
-                  } else {
-                    return colorScale(0);
-                  }
-                })
-                .style("stroke", "black")
-                .style("stroke-width", 0.5);
-            }
-          }
-        }
-      );
-    }, i * 1000);
+    changedTimestamps[index] = moment(timeStamp1 + dateDiff * i).format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    changedTimestamps[index + 1] = moment(
+      timeStamp1 + dateDiff * (i + 1)
+    ).format("YYYY-MM-DD HH:mm:ss");
+    index = index + 1;
   }
 
+  //create a tooltip
+  var divTooltip = d3
+    .select("#gridtooltip")
+    .style("position", "absolute")
+    .style("text-align", "center")
+    .style("background", "white")
+    .style("color", "black")
+    .style("padding", "8px")
+    .style("border", "1px solid #313639")
+    .style("border-radius", "4px")
+    .style("opacity", 0);
+
+  let data0 = [];
+  Promise.all([
+    getDataForAllCategories(changedTimestamps[0], changedTimestamps[1]),
+    getDataForAllCategories(changedTimestamps[1], changedTimestamps[2]),
+    getDataForAllCategories(changedTimestamps[2], changedTimestamps[3]),
+    getDataForAllCategories(changedTimestamps[3], changedTimestamps[4]),
+    getDataForAllCategories(changedTimestamps[4], changedTimestamps[5]),
+    getDataForAllCategories(changedTimestamps[5], changedTimestamps[6]),
+  ]).then(function (values) {
+    gridMapSvg.selectAll("text").remove();
+    for (let i = 0; i < values.length; i++) {
+      let data = values[i];
+      data0[i] = data[1];
+      console.log(data);
+      for (var k = 0; k < mapData.length; k++) {
+        for (var j = 0; j < 6; j++) {
+          lineGraph
+            .append("svg:rect")
+            .attr("width", 25)
+            .attr("height", 25)
+            .attr("transform", function (d) {
+              return (
+                "translate(" +
+                (150 * mapData[k].x + i * 25) +
+                "," +
+                (mapData[k].y * 150 + (j + 4) * 25) +
+                ")"
+              );
+            })
+            .style("fill", (d) => {
+              let damage = damageArray[j];
+              let strk = (k + 1).toString();
+              if (data[strk]) {
+                if (data[strk][damage] == null) {
+                  return colorScale(0);
+                }
+                return colorScale(data[strk][damage]);
+              } else {
+                return colorScale(0);
+              }
+            })
+            .style("stroke", "black")
+            .style("stroke-width", 0.5);
+        }
+      }
+    }
+
+    let subrect = d3.select("#gridmap").append("svg");
+    subrect
+      .append("rect")
+      .attr("x", 120)
+      .attr("y", 700)
+      .attr("id", "rectlegend")
+      .attr("stroke-width", 5)
+      .attr("width", 150)
+      .attr("height", 150)
+      .style("stroke", "black")
+      .style("fill", function (d) {
+        return "white";
+      });
+
+    for (let b = 0; b < 6; b++) {
+      for (let u = 0; u < 6; u++) {
+        subrect
+          .append("svg:rect")
+          .attr("width", 25)
+          .attr("height", 25)
+          .attr("x", 120 + b * 25)
+          .attr("y", 700 + u * 25)
+          .style("fill", function (d) {
+            let damage = damageArray[u];
+            return colorScale(data0[b][damage]);
+          })
+          .style("stroke", "black")
+          .style("stroke-width", 0.5)
+          .on("mouseover", function () {
+            divTooltip
+              .html("City : Palace Hills")
+              .style("left", d3.event.pageX + 10 + "px")
+              .style("top", d3.event.pageY - 20 + "px")
+              .style("opacity", 1);
+          })
+          .on("mouseout", function (d, i) {
+            divTooltip.style("opacity", 0);
+          });
+        subrect
+          .append("text")
+          .style("font-size", "13px")
+          .attr("x", 115)
+          .attr("y", 717 + u * 25)
+          .text(damageArray[u])
+          .attr("text-anchor", "end");
+      }
+      subrect
+        .append("text")
+        .attr("transform", "rotate(90 " + (115 + b * 25) + " " + 555 + ")")
+        .style("font-size", "13px")
+        .attr("font-weight", 600)
+        .style("text-anchor", "start")
+        .attr("x", 115 + b * 25)
+        .attr("y", 555)
+        .text(changedTimestamps[b]);
+    }
+    subrect
+      .append("text")
+      .attr("transform", "rotate(90 " + (115 + 6 * 25) + " " + 555 + ")")
+      .style("font-size", "13px")
+      .attr("font-weight", 600)
+      .style("text-anchor", "start")
+      .attr("x", 115 + 6 * 25)
+      .attr("y", 555)
+      .text(changedTimestamps[6]);
+
+    subrect
+      .append("text")
+      .style("font-size", "18px")
+      .attr("font-weight", 600)
+      .style("text-anchor", "middle")
+      .attr("x", 200)
+      .attr("y", 870)
+      .text("Palace Hills");
+  });
+
   for (let i = 0; i < mapData.length; i++) {
-    svg
+    gridSvg
       .append("line")
       .style("stroke", "black")
       .style("stroke-width", 4)
@@ -107,7 +207,7 @@ export function plotGridMap(startInterval, endInterval) {
   }
 
   for (let w = 0; w < mapData.length; w++) {
-    svg
+    gridSvg
       .append("line")
       .style("stroke", "black")
       .style("stroke-width", 4)
@@ -128,6 +228,30 @@ export function plotGridMap(startInterval, endInterval) {
       return "white";
     })
     .attr("transform", "translate(0,100)");
+
+  let currentCity = "";
+  gridSvg
+    .selectAll("svg")
+    .on("mouseover", function () {
+      let x = d3.event.pageX;
+      let y = d3.event.pageY - 1800;
+      for (let h = 0; h < mapData.length; h++) {
+        let mapx = mapData[h].x * 150;
+        let mapy = mapData[h].y * 150;
+        if (x > mapx && y > mapy && x < mapx + 150 && y < mapy + 150) {
+          console.log(mapData[h].enName);
+          currentCity = mapData[h].enName;
+        }
+      }
+      divTooltip
+        .html("City : " + currentCity)
+        .style("left", d3.event.pageX + 10 + "px")
+        .style("top", d3.event.pageY - 20 + "px")
+        .style("opacity", 1);
+    })
+    .on("mouseout", function (d, i) {
+      divTooltip.style("opacity", 0);
+    });
 
   sEnter
     .append("text")
