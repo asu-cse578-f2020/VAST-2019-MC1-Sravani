@@ -2,9 +2,7 @@ import {
   getMeanForGivenCategory,
   getEntropyForGivenCategory,
 } from "./utils.js";
-import {
-  plotfrommap, updateData
-} from "./ScatterPlot.js";
+import { plotfrommap, updateData } from "./ScatterPlot.js";
 var mapSvg;
 var mapData;
 var topoData;
@@ -31,7 +29,6 @@ export function getGlobalDimension() {
 export function getClickedCity() {
   return clickedCity;
 }
-
 
 document.getElementById("map-power").addEventListener("click", function () {
   applySelectedClassToButton("map-power");
@@ -137,6 +134,7 @@ export function updateMapData(ts1, ts2) {
   ]).then(function (values) {
     MeanArray = values[0];
     EntropyArray = values[1];
+    console.log(MeanArray, EntropyArray);
     drawMap(MeanArray, EntropyArray);
   });
 }
@@ -146,6 +144,7 @@ export function drawMap(
   MapMeanArray = MeanArray,
   MapEntropyArray = EntropyArray
 ) {
+  mapSvg.selectAll("path").remove();
   mapSvg.selectAll(".map-label").remove();
   mapSvg.selectAll(".map-hospitals").remove();
   mapSvg.selectAll(".map-bridges").remove();
@@ -200,14 +199,23 @@ export function drawMap(
     })
     .attr("fill", (d) => {
       let val = MapMeanArray[d.properties.Id];
-      return colorScale(val);
+      if (!val & (val != 0)) {
+        return "#D3D3D3";
+      } else return colorScale(val);
     })
     .attr("stroke", "black")
     .attr("stroke-width", (d) => {
       let entropyVal = MapEntropyArray[d.properties.Id];
+      if (!entropyVal && entropyVal != 0) return 2;
       if (entropyVal >= 0 && entropyVal <= 0.4) return 6;
       if (entropyVal >= 0.5 && entropyVal <= 0.7) return 3;
       if (entropyVal >= 0.8) return 0.3;
+    })
+    .style("stroke-dasharray", function (d) {
+      let entropyVal = MapEntropyArray[d.properties.Id];
+      if (!entropyVal && entropyVal != 0) {
+        return "2,2";
+      }
     })
     .on("mouseover", function (d, i) {
       d3.select(this).transition().duration("50").attr("opacity", ".85");
@@ -229,7 +237,7 @@ export function drawMap(
     })
     .on("click", function (d) {
       clickedCity = d.properties.Id;
-      updateData(clickedCity)
+      updateData(clickedCity);
       Window.city = d.properties.Nbrhood;
       document.getElementsByClassName("modal-title").innerHTML = clickedCity;
       $("#myModal").modal("show");
@@ -337,7 +345,7 @@ export function drawMap(
     mapSvg.selectAll(".map-bridges").classed("displaynone", true);
   }
 
-  var keys = ["Low", "Medium", "High"];
+  var keys = ["Low", "Medium", "High", "Unknown"];
   // Add one dot in the legend for each name.
   var size = 20;
   mapSvg
@@ -347,14 +355,14 @@ export function drawMap(
     .append("rect")
     .attr("x", 50)
     .attr("y", function (d, i) {
-      return 400 + i * (size + 5);
+      return 320 + i * (size + 5);
     }) // 100 is where the first dot appears. 25 is the distance between dots
     .attr("width", size)
     .attr("height", size)
     .style("fill", function (d, i) {
-      if (i == 0) return colorScale(1);
-      if (i == 1) return colorScale(6);
-      else return colorScale(9);
+      console.log("colorScheme", colorScheme[i]);
+      if (i == 3) return "#D3D3D3";
+      else return colorScheme[i];
     });
 
   // Add one dot in the legend for each name.
@@ -365,14 +373,14 @@ export function drawMap(
     .append("text")
     .attr("x", 50 + size * 1.2)
     .attr("y", function (d, i) {
-      return 400 + i * (size + 5) + size / 2;
+      return 320 + i * (size + 5) + size / 2;
     }) // 100 is where the first dot appears. 25 is the distance between dots
     .text(function (d) {
       return d;
     })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
-  var certainity = ["Uncertain", "Certain", "Highly Certain"];
+  var certainity = ["Uncertain", "Certain", "Highly Certain", "Unknown"];
   mapSvg
     .selectAll("certainitydots")
     .data(certainity)
@@ -380,7 +388,7 @@ export function drawMap(
     .append("rect")
     .attr("x", 50)
     .attr("y", function (d, i) {
-      return 480 + i * (size + 7);
+      return 450 + i * (size + 7);
     }) // 100 is where the first dot appears. 25 is the distance between dots
     .attr("width", size)
     .attr("height", size)
@@ -390,6 +398,10 @@ export function drawMap(
       if (i == 0) return 0.3;
       if (i == 1) return 3;
       if (i == 2) return 6;
+      if (i == 3) return 2;
+    })
+    .attr("stroke-dasharray", (d, i) => {
+      if (i == 3) return "2,2";
     });
 
   // Add one dot in the legend for each name.
@@ -400,7 +412,7 @@ export function drawMap(
     .append("text")
     .attr("x", 50 + size * 1.2)
     .attr("y", function (d, i) {
-      return 480 + i * (size + 7) + size / 2;
+      return 450 + i * (size + 7) + size / 2;
     }) // 100 is where the first dot appears. 25 is the distance between dots
     .text(function (d) {
       return d;
@@ -410,14 +422,19 @@ export function drawMap(
 }
 
 function applySelectedClassToButton(selectedButtonId) {
-  let buttonsIds = ["map-power", "map-buildings", "map-medical", "map-shake", "map-sewer", "map-roads"];
-  buttonsIds.forEach(buttonId => {
+  let buttonsIds = [
+    "map-power",
+    "map-buildings",
+    "map-medical",
+    "map-shake",
+    "map-sewer",
+    "map-roads",
+  ];
+  buttonsIds.forEach((buttonId) => {
     if (buttonId == selectedButtonId) {
       document.getElementById(buttonId).classList.add("selected-button");
-    }
-    else {
+    } else {
       document.getElementById(buttonId).classList.remove("selected-button");
     }
-  })
-
+  });
 }
