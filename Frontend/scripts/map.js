@@ -2,6 +2,9 @@ import {
   getMeanForGivenCategory,
   getEntropyForGivenCategory,
 } from "./utils.js";
+import {
+  plotfrommap,
+} from "./ScatterPlot.js";
 var mapSvg;
 var mapData;
 var topoData;
@@ -22,23 +25,33 @@ function setGlobalDimension(dimension) {
   //console.log("global dim set to", dimension)
   updateMapData(startTime, EndTime);
 }
+export function getGlobalDimension() {
+  return globalDimension;
+}
+
 document.getElementById("map-power").addEventListener("click", function () {
   setGlobalDimension("power");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-buildings").addEventListener("click", function () {
   setGlobalDimension("buildings");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-medical").addEventListener("click", function () {
   setGlobalDimension("medical");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-shake").addEventListener("click", function () {
   setGlobalDimension("shake_intensity");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-sewer").addEventListener("click", function () {
   setGlobalDimension("sewer_and_water");
+  plotfrommap(globalDimension);
 });
 document.getElementById("map-roads").addEventListener("click", function () {
   setGlobalDimension("roads_and_bridges");
+  plotfrommap(globalDimension);
 });
 
 document
