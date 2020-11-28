@@ -29,55 +29,31 @@ async function getDataForAllCategories(timestamp1, timestamp2) {
 
 // This runs when the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
-  // Load both files before doing anything else
-  // Promise.all([d3.json('data/africa.geojson'),
-  // d3.csv('data/africa_gdp_per_capita.csv')])
-  //   .then(function (values) {
-
-  //     stackedBarChartData = values[0];
-  //     timeData = values[1];
-
-  //     drawStackedBarChart();
-  //   })
-
-  // getDataForAllCategories('2020-04-06 00:35:00', '2020-04-06 23:40:00').then(data => {
-  //   for(let key in data){
-  //     stackedBarChartData.push(data[key])
-  //   }
-  //   drawStackedBarChart(stackedBarChartData);
-  // });
-  // drawchart('2020-04-06 00:35:00', '2020-04-06 23:40:00');
+  svg = d3.select('#stackedbarchart')
+  svg.attr("width", (width + margin.left + margin.right))
+    .attr("height", height + margin.top + margin.bottom);
 });
 
 
 function drawchart(t1, t2) {
-  stackedBarChartData = [];
   getDataForAllCategories(t1, t2).then(data => {
+    stackedBarChartData = [];
     for (let key in data) {
       stackedBarChartData.push(data[key])
     }
     drawStackedBarChart(stackedBarChartData);
   });
-
-
 }
 
 // Draw the stackedBarChart in the #stackedBarChart svg
 function drawStackedBarChart(data) {
   data = data.sort((a, b) => { return b.total - a.total });
-  data = data.slice(0, 6)
-  svg = d3.select('#stackedbarchart')
-  svg.attr("width", (width + margin.left + margin.right))
-    .attr("height", height + margin.top + margin.bottom);
-  // let legend = svg.append(g)
-  //   .attr("transform", `translate(${margin.left},${0})`)
-
-  //   legend.append("circle").attr("cx",400).attr("cy",30).attr("r", 6).style("fill", "#69b3a2")
-  var y = d3.scaleBand()			// x = d3.scaleBand()	
+  data = data.slice(0, 6);
+  var y = d3.scaleBand()
     .domain(data.map(function a(d) {
       return d.total_country;
     }))
-    .range([0, 1.2 * height]);
+    .range([0, 1.3 * height]);
 
   var x = d3.scaleLinear()
     .domain([
@@ -85,38 +61,49 @@ function drawStackedBarChart(data) {
       d3.max(data, function (d) {
         return d.total;
       }),
-    ])		// y = d3.scaleLinear()
-    .rangeRound([0, 1 * width]);	// .rangeRound([height, 0]);
-  var z = d3
-    .scaleOrdinal()
-    .domain(function (data) { return data.columns.slice(0, 5) })
-    .range(["#44a2c2", "#eb4034", "#e0c71f", "#a2c7fa", "#4346f7", "#875133",]);
+    ])
+    .rangeRound([0, 1.45 * width]);
+  var z = d3.scaleOrdinal()
+    .domain(["power", "buildings", "medical", "shake_intensity", "sewer_and_water", "roads_and_bridges"])
+    .range(["rgb(252, 146, 114)", "rgb(158, 202, 225)", "rgb(161, 217, 155)", "rgb(188, 189, 220)", "rgb(253, 174, 107)", "rgb(201, 148, 199)"]);
+
+  svg.select('.yaxis').remove();
+  svg.select('.xaxis').remove();
+  svg.select('.ylabel').remove();
+  svg.select('.xlabel').remove();
   // y-axis
-  svg.append("g")
-    .attr("transform", `translate(${margin.left},40)`)
-    .attr("class", "y-axis")
-    .call(d3.axisLeft(y).tickSize(`10`));
+  const customYAxis = svg.append("g")
+    .attr("transform", `translate(${margin.left},100)`)
+    .attr("class", "yaxis")
+    .call(d3.axisLeft(y).tickSize(`5`));
 
   svg.append("text")
+    .attr("class", "ylabel")
     .attr("transform", "rotate(-90)")
     .attr("y", 0)
-    .attr("x", 0 - (height / 1.5))
+    .attr("x", 0 - (height / 1.2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .text("Countries");
 
   // x-axis
   svg.append("g")
-    .attr("transform", `translate(${margin.left},${1.318 * height})`)
-    .attr("class", "x-axis")
+    .attr("transform", `translate(${margin.left},${1.595 * height})`)
+    .attr("class", "xaxis")
     .call(d3.axisBottom(x).tickSize(`10`));
 
   svg.append("text")
+    .attr("class", "xlabel")
     .attr("transform",
-      "translate(" + (width / 1.5) + " ," +
-      (height + margin.top + 120) + ")")
+      "translate(" + (width / 1.35) + " ," +
+      (1.2 * height + margin.top + 150) + ")")
     .style("text-anchor", "middle")
-    .text("Intensities");
+    .text("Damage Intensities");
+
+  d3.selectAll(".yaxis>.tick>text")
+    .each(function (d, i) {
+      d3.select(this).style("font-size", 16);
+    });
 
   var tooltip = d3.select("body")
     .append("div")
@@ -126,60 +113,74 @@ function drawStackedBarChart(data) {
   let legend = svg.append('g')
     .attr("transform", `translate(${margin.left},${0})`)
 
-  legend.append("circle").attr("cx", 425).attr("cy", 100).attr("r", 6).style("fill", "#eb4034")
-  legend.append("text").attr("x", 450).attr("y", 103).text('shake_intensity')
+  legend.append("circle").attr("cx", 10).attr("cy", 25).attr("r", 6).style("fill", "rgb(252, 146, 114)");
+  legend.append("text").attr("x", 25).attr("y", 28).text('Power');
 
-  legend.append("circle").attr("cx", 425).attr("cy", 125).attr("r", 6).style("fill", "#e0c71f")
-  legend.append("text").attr("x", 450).attr("y", 128).text('medical')
+  legend.append("circle").attr("cx", 225).attr("cy", 25).attr("r", 6).style("fill", "rgb(158,202,225)");
+  legend.append("text").attr("x", 240).attr("y", 28).text('Buildings');
 
-  legend.append("circle").attr("cx", 425).attr("cy", 150).attr("r", 6).style("fill", "#a2c7fa")
-  legend.append("text").attr("x", 450).attr("y", 153).text('power')
+  legend.append("circle").attr("cx", 450).attr("cy", 25).attr("r", 6).style("fill", "rgb(161,217,155)");
+  legend.append("text").attr("x", 465).attr("y", 28).text('Medical');
 
-  legend.append("circle").attr("cx", 425).attr("cy", 175).attr("r", 6).style("fill", "#4346f7")
-  legend.append("text").attr("x", 450).attr("y", 178).text('buildings')
+  legend.append("circle").attr("cx", 10).attr("cy", 60).attr("r", 6).style("fill", "rgb(188,189,220)");
+  legend.append("text").attr("x", 25).attr("y", 63).text('Shake Intensity');
 
-  legend.append("circle").attr("cx", 425).attr("cy", 200).attr("r", 6).style("fill", "#875133")
-  legend.append("text").attr("x", 450).attr("y", 203).text('sewer_and_water')
+  legend.append("circle").attr("cx", 225).attr("cy", 60).attr("r", 6).style("fill", "rgb(253,174,107)");
+  legend.append("text").attr("x", 240).attr("y", 63).text('Sewer and Water');
 
-  legend.append("circle").attr("cx", 425).attr("cy", 225).attr("r", 6).style("fill", "#44a2c2")
-  legend.append("text").attr("x", 450).attr("y", 228).text('roads_and_bridges')
+  legend.append("circle").attr("cx", 450).attr("cy", 60).attr("r", 6).style("fill", "rgb(201,148,199)");
+  legend.append("text").attr("x", 465).attr("y", 63).text('Roads and Bridges');
 
-  var series = d3.stack().keys(["shake_intensity", "medical", "power", "buildings", "sewer_and_water", "roads_and_bridges"])(data).map(d => (d.forEach(v => v.key = d.key), d));
-  svg.append("g")
+  var series = d3.stack().keys(["power", "buildings", "medical", "shake_intensity", "sewer_and_water", "roads_and_bridges"])(data).map(d => (d.forEach(v => v.key = d.key), d));
+  var bar = svg.append("g")
     .selectAll("g")
-    .data(series)
-    .enter().append("g")
+    .data(series);
+
+  bar.transition()
+    .attr("x", function (d) { return x(d.data['total_country']); })
+    .attr("y", function (d) { return y(d[1]); })
+    .attr("height", function (d) { return x(d[1]) - x(d[0]); });
+
+  bar.enter().append("g")
     .attr("fill", function (d) { return z(d.key); })
     .selectAll("rect")
     .data(function (d) { return d; })
     .enter().append("rect")
-    .attr("y", function (d) { return y(d.data.total_country); })	    //.attr("x", function(d) { return x(d.data.State); })
-    .attr("x", function (d) { return x(d[0]); })			    //.attr("y", function(d) { return y(d[1]); })	
-    .attr("width", function (d) { return x(d[1]) - x(d[0]); })	//.attr("height", function(d) { return y(d[0]) - y(d[1]); })
+    .attr("y", function (d) { return y(d.data.total_country); })
+    .attr("x", function (d) { return x(d[0]) })
+    .attr("width", function (d) { return x(d[1]) - x(d[0]); })
     .attr("height", 40)
-    .attr("transform", `translate(${margin.left},${margin.top + 25})`)
+    .attr("transform", `translate(${margin.left},${margin.top + 85})`)
     .style("cursor", "pointer")
     .on('mouseover', function (d, i) {
       tooltip.style('class', '.tooltip')
         .text(function () {
-          return "value: " + (`${(d[1] - d[0]).toFixed(2)}`);
+          return `${getCategoryNameFromKey(d.key)}: ` + (`${(d[1] - d[0]).toFixed(2)}`) + "\nTotal Damage Intensity: " + (`${(d.data.total).toFixed(2)}`);
         })
         .style('opacity', 1)
         .style("left", (d3.event.pageX + 10) + "px")
         .style("top", (d3.event.pageY - 30) + "px")
 
     })
-    .on('mousemove', function (d, i) {
-      // console.log('mousemove on ' + d.properties.name);
-    })
+    .on('mousemove', function (d, i) { })
     .on('mouseout', function (d, i) {
       tooltip.style('opacity', 0)
     });
+}
 
-
-
-
-
+function getCategoryNameFromKey(key) {
+  if (key == 'shake_intensity') {
+    return 'Shake Intensity';
+  }
+  else if (key == 'sewer_and_water') {
+    return 'Sewer and Water';
+  }
+  else if (key == 'roads_and_bridges') {
+    return 'Roads and Bridges';
+  }
+  else {
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
 }
 
 

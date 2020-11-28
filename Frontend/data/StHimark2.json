@@ -469,7 +469,9 @@
           "arcs": [[0, 1, 2]],
           "type": "Polygon",
           "properties": { "Id": 1, "Nbrhood": "Palace Hills",  "Events": "Bridge repair - Delays expected",
-            "Constructions": "Friday Bridge, Magritte bridge, Himark General Hospital" }
+          "Constructions": "Friday Bridge, Magritte bridge, Himark General Hospital", 
+          "Bridge":"Friday Bridge, Magritte bridge",
+          "Hospital": "Himark General Hospital"}
         },
         {
           "arcs": [[-3, 3, 4, 5, 6, 7, 8, 9, 10, 11]],
@@ -481,13 +483,20 @@
           "arcs": [[12, 13, 14, 15, 16, -6, 17]],
           "type": "Polygon",
           "properties": { "Id": 3, "Nbrhood": "Old Town", "Events": "Water-and-sewer maintenance, Power outages lasting 30-60 minutes",
-            "Constructions": "Jade bridge, Public School, Old Town Hospital" }
+            "Constructions": "Jade bridge, Public School, Old Town Hospital",
+            "Bridge":"Jade bridge",
+            "Hospital": "Old Town Hospital",
+            "School": "Public School"
+          }
         },
         {
           "arcs": [[18, 19, 20, 21, -14]],
           "type": "Polygon",
           "properties": { "Id": 4, "Nbrhood": "Safe Town","Events": "Bridge repair - Delays expected",
-            "Constructions": "Always Safe nuclear power plant, Jade bridge,  12th of July Bridge" }
+          "Constructions": "Always Safe nuclear power plant, Jade bridge,  12th of July Bridge",
+          "Bridge": "Jade bridge,  12th of July Bridge",
+          "Powerplant": "Always Safe Nuclear power plant"
+          }
         },
         {
           "arcs": [[-1, -12, 22, 23, 24, 25, 26, 27]],
@@ -499,13 +508,16 @@
           "arcs": [[-23, -11, 28, -9, 29]],
           "type": "Polygon",
           "properties": { "Id": 6, "Nbrhood": "Downtown",  "Events": "Roads maintenance - Delays expected",
-            "Constructions": "Trauma Hospital, Children Hospital" }
+          "Constructions": "Trauma Hospital, Children Hospital",
+          "Hospital": "Trauma Hospital, Children Hospital"
+          }
         },
         {
           "arcs": [[30, 31]],
           "type": "Polygon",
           "properties": { "Id": 7, "Nbrhood": "Wilson Forest",  "Events": "Roads_and_bridges Repair - Traffic delays",
-            "Constructions": "Himark Bridge" }
+            "Constructions": "Himark Bridge",
+          "Bridge":"Himark Bridge" }
         },
         {
           "arcs": [[32, 33, 34, 35, 36, 37, -31]],
@@ -517,7 +529,9 @@
           "arcs": [[38, 39, 40, 41, 42, 43, -34]],
           "type": "Polygon",
           "properties": { "Id": 9, "Nbrhood": "Broadview", "Events": "Roads maintenance",
-            "Constructions": "Public School, Commpunity hospital" }
+            "Constructions": "Public School, Commpunity hospital",
+            "School":"Public School",
+            "Hospital": "Commpunity hospital"}
         },
         {
           "arcs": [[44, 45, 46, -35, -44, 47, -42]],
@@ -529,7 +543,10 @@
           "arcs": [[-46, 48, 49, -37, 50]],
           "type": "Polygon",
           "properties": { "Id": 11, "Nbrhood": "Terrapin Springs","Events": "",
-            "Constructions": "Public School, Gold Care hospital" }
+            "Constructions": "Public School, Gold Care hospital",
+            "School":"Public School",
+            "Hospital":"Gold Care hospital"
+           }
         },
         {
           "arcs": [[-49, 51, 52, -20, 53]],
@@ -547,7 +564,9 @@
           "arcs": [[59, 60, -15, -22]],
           "type": "Polygon",
           "properties": { "Id": 14, "Nbrhood": "Easton","Events": "",
-            "Constructions": "Public School" }
+            "Constructions": "Public School",
+            "School":"Public School"
+           }
         },
         {
           "arcs": [[-61, 61, 62, -8, 63, -16]],
@@ -559,7 +578,9 @@
           "arcs": [[64, 65, -25, 66, -62]],
           "type": "Polygon",
           "properties": { "Id": 16, "Nbrhood": "Southton", "Events": "Roads maintenance",
-            "Constructions": "Eagleton Hospital" }
+            "Constructions": "Eagleton Hospital",
+            "Hospital": "Eagleton Hospital"
+           }
         },
         {
           "arcs": [[-27, 67, 68, 69, 70, -56, 71, -40, 72]],
@@ -571,13 +592,17 @@
           "arcs": [[73, 74, -58, 75, -70, 76]],
           "type": "Polygon",
           "properties": { "Id": 18, "Nbrhood": "East Parton","Events": "Water-and-sewer Repair",
-            "Constructions": "Public School" }
+            "Constructions": "Public School",
+            "School":"Public School"
+           }
         },
         {
           "arcs": [[-74, 77, 78, -65, -60]],
           "type": "Polygon",
           "properties": { "Id": 19, "Nbrhood": "West Parton", "Events": "Water-and-sewer maintenance",
-            "Constructions": "Public School" }
+            "Constructions": "Public School",
+            "School":"Public School"
+           }
         }
       ]
     }

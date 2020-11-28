@@ -94,7 +94,6 @@ def get_damage(t1,t2):
         for category in categories:
             temp_category=nba_location.get_group(group_name).dropna(subset=[category])
             locations_timelyAverage.append([group_name,category,temp_category[category].mean()])
-            print(locations_timelyAverage)
             df=pd.DataFrame(locations_timelyAverage)
             
     return df
