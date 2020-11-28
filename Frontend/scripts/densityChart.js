@@ -78,7 +78,42 @@ function drawDensityChart(data) {
   densityChartSvg
     .append("g")
     .attr("transform", "translate(100," + (height + 150) + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x)
+    .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
+    );
+
+  densityChartSvg.append("text")
+    .attr("class", "ylabel")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 30)
+    .attr("x", -(height + 70))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("font-size", "0.9em")
+    .style("font-weight", "bold")
+    .text(`Log 11 value of`);
+
+  densityChartSvg.append("text")
+    .attr("class", "ylabel")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 50)
+    .attr("x", -(height + 70))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("font-size", "0.9em")
+    .style("font-weight", "bold")
+    .text("number of reports");
+
+
+  densityChartSvg.append("text")
+    .attr("class", "xlabel")
+    .attr("transform",
+      "translate(" + (width / 1.35) + " ," +
+      (1.1 * height + margin.top + 150) + ")")
+    .style("text-anchor", "middle")
+    .style("font-size", "0.9em")
+    .style("font-weight", "bold")
+    .text("Time");
 
   // Add Y axis
   var y = d3
@@ -200,6 +235,8 @@ function drawDensityChart(data) {
       var sx = s.map(x.invert);
       let date1 = new Date(sx[0]);
       let date2 = new Date(sx[1]);
+      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      document.getElementById('selectedtime').innerHTML = `<b>${months[date1.getMonth()]} ${date1.getDate()} ${date1.getFullYear()} ${date1.getHours()}:${date1.getMinutes()}:${date1.getSeconds()}</b> to <b>${months[date2.getMonth()]} ${date2.getDate()} ${date2.getFullYear()} ${date2.getHours()}:${date2.getMinutes()}:${date2.getSeconds()}</b>`;
       let ts1 = convertDateToTimeStamp(date1);
       let ts2 = convertDateToTimeStamp(date2);
       if (userSelect) {
