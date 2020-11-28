@@ -1,5 +1,5 @@
 import {
-  getGlobalDimension,
+  getGlobalDimension, getClickedCity
 } from "./map.js";
 
 var scatterPlotSvg;
@@ -13,6 +13,7 @@ var a = NaN;
 // This runs when the page is loaded
 document.addEventListener('DOMContentLoaded', function () {
  scatterPlotSvg = d3.select('#scatterplot');
+ console.log("")
  
 //xScale
 x = d3.scaleLinear()
@@ -24,10 +25,10 @@ y = d3.scaleLinear()
 
 //radiusScale    
 radiusScale=d3.scaleSqrt();
-var l=document.getElementById("location_val").value;
+//var l=document.getElementById("location_val").value;
+var lx=getClickedCity();
 
-
-fetch("http://localhost:5000/reportcountanddamage/"+(l+1))
+fetch("http://localhost:5000/reportcountanddamage/"+(lx))
     .then((response) => {
       response.json().then(function (data) {
       
@@ -155,15 +156,18 @@ var colorScale = d3.scaleOrdinal(colorScheme).domain([0, 10]);
  document.addEventListener('input', function() {
 
  var l=document.getElementById("location_val").value;
+ 
  //console.log(+l)
  updateData(+l);
  });
 
+
+
 // ** Update data section (Called from the onclick)
-function updateData(loc) {
+export function updateData(loc) {
   
 //console.log(loc+1)
-  fetch("http://localhost:5000/reportcountanddamage/"+(loc+1))
+  fetch("http://localhost:5000/reportcountanddamage/"+(loc))
     .then((response) => {
       response.json().then(function (data) {
       
@@ -284,10 +288,10 @@ svg.append('g')
 }
  
 export function plotfrommap(globalDimension){
-var l= +document.getElementById("location_val").value;
+var l = getClickedCity();
 //console.log(l+1);
 
-fetch("http://localhost:5000/reportcountanddamage/"+(l+1))
+fetch("http://localhost:5000/reportcountanddamage/"+(l))
 .then((response) => {
   response.json().then(function (data) {
        

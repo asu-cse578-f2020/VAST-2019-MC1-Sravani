@@ -3,7 +3,7 @@ import {
   getEntropyForGivenCategory,
 } from "./utils.js";
 import {
-  plotfrommap,
+  plotfrommap, updateData
 } from "./ScatterPlot.js";
 var mapSvg;
 var mapData;
@@ -17,7 +17,7 @@ var Bridges;
 var Schools;
 var Powerplant;
 var tooltpdiv;
-var clickedCity;
+var clickedCity=7;
 
 var globalDimension = "power";
 function setGlobalDimension(dimension) {
@@ -27,6 +27,10 @@ function setGlobalDimension(dimension) {
 }
 export function getGlobalDimension() {
   return globalDimension;
+}
+
+export function getClickedCity() {
+  return clickedCity;
 }
 
 document.getElementById("map-power").addEventListener("click", function () {
@@ -225,7 +229,8 @@ export function drawMap(
     .on("click", function (d) {
       console.log("Modal Clicked");
 
-      clickedCity = d.properties.Nbrhood;
+      clickedCity = d.properties.Id;
+      updateData(clickedCity)
       Window.city = d.properties.Nbrhood;
       document.getElementsByClassName("modal-title").innerHTML = clickedCity;
       $("#myModal").modal("show");
