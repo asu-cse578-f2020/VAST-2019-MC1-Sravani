@@ -117,22 +117,35 @@
         </div>
         <div class="row">
           <div class="col-sm-12 gridcol">
+            <div style="text-align: center; font-size: 18px; font-weight:bold">Number of reports per time</div>
             <svg id="densitychart" style="height: 250px"></svg>
-            <div>
-              <button
-                id="playbtn"
-                type="button"
-                class="btn btn-outline-primary"
-              >
-                Play
-              </button>
-              <button
-                id="pausebtn"
-                type="button"
-                class="btn btn-outline-primary"
-              >
-                Pause
-              </button>
+            <div class="row">
+              <div class="col-lg-5">
+                <div>
+                  <span style="padding-left:100px;">
+                    <button
+                    id="playbtn"
+                    type="button"
+                    class="btn btn-outline-primary"
+                  >
+                    Play
+                  </button>
+                  <button
+                    id="pausebtn"
+                    type="button"
+                    style="margin-left:8px;"
+                    class="btn btn-outline-primary"
+                  >
+                    Pause
+                  </button>
+
+                  </span>
+                  
+                </div>
+              </div>
+              <div class="col-lg-7">
+                Selected Time: <span id="selectedtime"></span>
+              </div>
             </div>
           </div>
         </div>
