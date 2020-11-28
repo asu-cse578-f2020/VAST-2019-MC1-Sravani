@@ -234,7 +234,7 @@ export function plotGridMap(startInterval, endInterval) {
     .selectAll("svg")
     .on("mouseover", function () {
       let x = d3.event.pageX;
-      let y = d3.event.pageY - 1800;
+      let y = d3.event.pageY - 1200;
       for (let h = 0; h < mapData.length; h++) {
         let mapx = mapData[h].x * 150;
         let mapy = mapData[h].y * 150;
