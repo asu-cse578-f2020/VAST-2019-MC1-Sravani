@@ -26,7 +26,7 @@ export function plotGridMap(startInterval, endInterval) {
   var dateDiff = getDateDiff(startInterval, endInterval);
   var timeStamp1 = Date.parse(startInterval, "YYYY-MM-DD HH:mm:ss");
 
-  var svg = gridMapSvg.attr("width", 600).attr("height", 600);
+  var gridSvg = gridMapSvg.attr("width", 600).attr("height", 600);
   let damageArray = [
     "power",
     "buildings",
@@ -35,7 +35,7 @@ export function plotGridMap(startInterval, endInterval) {
     "sewer_and_water",
     "roads_and_bridges",
   ];
-  var sEnter = svg
+  var sEnter = gridSvg
     .append("g")
     .selectAll("g")
     .data(mapData)
@@ -118,9 +118,8 @@ export function plotGridMap(startInterval, endInterval) {
         }
       }
     }
-    console.log(data0);
 
-    let subrect = gridMapSvg.append("svg");
+    let subrect = d3.select("#gridmap").append("svg");
     subrect
       .append("rect")
       .attr("x", 120)
@@ -147,7 +146,17 @@ export function plotGridMap(startInterval, endInterval) {
             return colorScale(data0[b][damage]);
           })
           .style("stroke", "black")
-          .style("stroke-width", 0.5);
+          .style("stroke-width", 0.5)
+          .on("mouseover", function () {
+            divTooltip
+              .html("City : Palace Hills")
+              .style("left", d3.event.pageX + 10 + "px")
+              .style("top", d3.event.pageY - 20 + "px")
+              .style("opacity", 1);
+          })
+          .on("mouseout", function (d, i) {
+            divTooltip.style("opacity", 0);
+          });
         subrect
           .append("text")
           .style("font-size", "13px")
@@ -187,7 +196,7 @@ export function plotGridMap(startInterval, endInterval) {
   });
 
   for (let i = 0; i < mapData.length; i++) {
-    svg
+    gridSvg
       .append("line")
       .style("stroke", "black")
       .style("stroke-width", 4)
@@ -198,7 +207,7 @@ export function plotGridMap(startInterval, endInterval) {
   }
 
   for (let w = 0; w < mapData.length; w++) {
-    svg
+    gridSvg
       .append("line")
       .style("stroke", "black")
       .style("stroke-width", 4)
@@ -221,14 +230,16 @@ export function plotGridMap(startInterval, endInterval) {
     .attr("transform", "translate(0,100)");
 
   let currentCity = "";
-  svg
+  gridSvg
+    .selectAll("svg")
     .on("mouseover", function () {
       let x = d3.event.pageX;
       let y = d3.event.pageY - 1800;
       for (let h = 0; h < mapData.length; h++) {
         let mapx = mapData[h].x * 150;
         let mapy = mapData[h].y * 150;
-        if (x > mapx && y > mapy) {
+        if (x > mapx && y > mapy && x < mapx + 150 && y < mapy + 150) {
+          console.log(mapData[h].enName);
           currentCity = mapData[h].enName;
         }
       }
