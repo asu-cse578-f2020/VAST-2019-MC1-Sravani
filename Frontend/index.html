@@ -4,11 +4,14 @@
     <meta charset="utf-8" />
     <title>Group Project</title>
     <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="css/styles.css" />
     <script src="https://unpkg.com/topojson-client@3"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -75,14 +78,38 @@
             >
               Roads
             </button>
+            <br/>
             <div>
               <input
                 type="checkbox"
-                id="cities-checkbox"
-                onclick="setGlobalDimension('test')"
-              />Test Radio
+                id="bridges-checkbox"
+              />Bridges & PowerPlant &nbsp; &nbsp;
+              <input
+                type="checkbox"
+                id="schools-hospitals"
+              />Schools & Hospitals
             </div>
+            <div>
+              
+            </div>
+            
             <svg id="map"></svg>
+            <div id="myModal" class="modal fade modal-lg" tabindex="-1" role="dialog" >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Distribution of intensities for a city</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
           </div>
           <div class="col-sm-6 gridcol">
             <svg id="stackedbarchart"></svg>

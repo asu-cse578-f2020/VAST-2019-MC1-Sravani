@@ -61,15 +61,6 @@ export function plotGridMap(startInterval, endInterval) {
           console.log(data);
           for (var k = 0; k < mapData.length; k++) {
             for (var j = 0; j < 6; j++) {
-              console.log(
-                i +
-                  "  " +
-                  j +
-                  "  " +
-                  changedTimestamp1 +
-                  "  " +
-                  changedTimestamp2
-              );
               lineGraph
                 .append("svg:rect")
                 .attr("width", 25)
