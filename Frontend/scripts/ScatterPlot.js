@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
  
 //xScale
 x = d3.scaleLinear()
-     .range([ 0, 1000]);
+     .range([ 0, 850  ]);
 
 //yScale
 y = d3.scaleLinear()
@@ -80,7 +80,9 @@ var colorScale = d3.scaleOrdinal(colorScheme).domain([0, 10]);
   svg.append("g")
   .attr("class", "x_axis")
     .attr("transform", "translate(100," + (height + 150) + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x)
+    .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
+    );
     
   svg.append("g")
   .attr("class", "y_axis")
@@ -88,7 +90,7 @@ var colorScale = d3.scaleOrdinal(colorScheme).domain([0, 10]);
      .call(d3.axisLeft(y));
      
        radiusScale.domain(d3.extent(data,function(d) { return d.count; }))
-                .range([4,10]);
+                .range([10,20]);
                // var colorScale = d3.scaleOrdinal(colorScheme).domain([10, 10]);
   
   
@@ -220,14 +222,16 @@ svg.selectAll("g").remove()
   
   svg.append("g").attr("class", "x_axis")
     .attr("transform", "translate(100," + (height + 150) + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x)
+    .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
+    );
     
   svg.append("g").attr("class", "y_axis")
      .attr("transform", "translate(100,150)")
      .call(d3.axisLeft(y));
      
      radiusScale.domain(d3.extent(data,function(d) { return d.count; }))
-                .range([4,10]);
+                .range([10,20]);
                 var colorScale = d3.scaleOrdinal(colorScheme).domain([0, 10]);
                 
     var cP_x=getGlobalDimension()
@@ -346,7 +350,9 @@ svg.selectAll("g").remove()
   svg.append("g")
   .attr("class", "x_axis")
     .attr("transform", "translate(100," + (height + 150) + ")")
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(x)
+    .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
+    );
     
   svg.append("g")
   .attr("class", "y_axis")
@@ -354,7 +360,7 @@ svg.selectAll("g").remove()
      .call(d3.axisLeft(y));
      
       radiusScale.domain(d3.extent(data,function(d) { return d.count; }))
-                .range([4,10]);
+                .range([10,20]);
  var colorScale = d3.scaleOrdinal(colorScheme).domain([0, 10]);
  var tooltip = d3.select("body")
     .append("div")
