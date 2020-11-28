@@ -22,7 +22,6 @@ function getDateDiff(date1, date2) {
 }
 
 export function plotGridMap(startInterval, endInterval) {
-  console.log(startInterval, endInterval);
   var dateDiff = getDateDiff(startInterval, endInterval);
   var timeStamp1 = Date.parse(startInterval, "YYYY-MM-DD HH:mm:ss");
 
@@ -85,7 +84,6 @@ export function plotGridMap(startInterval, endInterval) {
     for (let i = 0; i < values.length; i++) {
       let data = values[i];
       data0[i] = data[1];
-      console.log(data);
       for (var k = 0; k < mapData.length; k++) {
         for (var j = 0; j < 6; j++) {
           lineGraph
@@ -239,7 +237,6 @@ export function plotGridMap(startInterval, endInterval) {
         let mapx = mapData[h].x * 150;
         let mapy = mapData[h].y * 150;
         if (x > mapx && y > mapy && x < mapx + 150 && y < mapy + 150) {
-          console.log(mapData[h].enName);
           currentCity = mapData[h].enName;
         }
       }

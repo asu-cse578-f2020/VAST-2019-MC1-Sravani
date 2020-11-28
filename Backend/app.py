@@ -52,11 +52,9 @@ def report_count():
 
 @app.route('/reportcountanddamage/<int:loc>', methods=['GET'])
 def reports_n_damage(loc):
-    print(loc)
     report_count_n_damage = get_reports_n_damage_by_location(loc)
     report_count_n_damage = pd.DataFrame(report_count_n_damage)
     report_count_n_damage = report_count_n_damage.to_json(orient='records')
-    print(report_count_n_damage)
     return report_count_n_damage
 
 

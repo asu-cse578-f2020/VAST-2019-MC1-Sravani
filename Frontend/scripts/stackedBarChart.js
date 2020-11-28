@@ -84,7 +84,7 @@ function drawStackedBarChart(data) {
     .attr("x", 0 - (height / 1.2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Countries");
+    .text("Cities");
 
   // x-axis
   svg.append("g")

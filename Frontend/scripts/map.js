@@ -17,12 +17,11 @@ var Bridges;
 var Schools;
 var Powerplant;
 var tooltpdiv;
-var clickedCity=7;
+var clickedCity = 7;
 
 var globalDimension = "power";
 function setGlobalDimension(dimension) {
   globalDimension = dimension;
-  //console.log("global dim set to", dimension)
   updateMapData(startTime, EndTime);
 }
 export function getGlobalDimension() {
@@ -33,27 +32,34 @@ export function getClickedCity() {
   return clickedCity;
 }
 
+
 document.getElementById("map-power").addEventListener("click", function () {
+  applySelectedClassToButton("map-power");
   setGlobalDimension("power");
   plotfrommap(globalDimension);
 });
 document.getElementById("map-buildings").addEventListener("click", function () {
+  applySelectedClassToButton("map-buildings");
   setGlobalDimension("buildings");
   plotfrommap(globalDimension);
 });
 document.getElementById("map-medical").addEventListener("click", function () {
+  applySelectedClassToButton("map-medical");
   setGlobalDimension("medical");
   plotfrommap(globalDimension);
 });
 document.getElementById("map-shake").addEventListener("click", function () {
+  applySelectedClassToButton("map-shake");
   setGlobalDimension("shake_intensity");
   plotfrommap(globalDimension);
 });
 document.getElementById("map-sewer").addEventListener("click", function () {
+  applySelectedClassToButton("map-sewer");
   setGlobalDimension("sewer_and_water");
   plotfrommap(globalDimension);
 });
 document.getElementById("map-roads").addEventListener("click", function () {
+  applySelectedClassToButton("map-roads");
   setGlobalDimension("roads_and_bridges");
   plotfrommap(globalDimension);
 });
@@ -87,6 +93,7 @@ document
 // This runs when the page is loaded
 document.addEventListener("DOMContentLoaded", function () {
   mapSvg = d3.select("#map");
+  document.getElementById("map-power").classList.add("selected-button");
 
   // Load both files before doing anything else
   Promise.all([d3.json("data/StHimark2.json")]).then(function (values) {
@@ -124,12 +131,10 @@ document.addEventListener("DOMContentLoaded", function () {
 export function updateMapData(ts1, ts2) {
   startTime = ts1;
   EndTime = ts2;
-  //console.log("mapupdate called")
   Promise.all([
     getMeanForGivenCategory(ts1, ts2, globalDimension),
     getEntropyForGivenCategory(ts1, ts2, globalDimension),
   ]).then(function (values) {
-    console.log("result is ", values[0], values[1]);
     MeanArray = values[0];
     EntropyArray = values[1];
     drawMap(MeanArray, EntropyArray);
@@ -148,7 +153,6 @@ export function drawMap(
   mapSvg.selectAll(".map-power").remove();
 
   //let checkeddimension =  d3.select('input').property('checked');
-  //console.log(globalDimension, MapMeanArray, MapEntropyArray);
   var colorScheme;
   switch (globalDimension) {
     case "power":
@@ -173,7 +177,6 @@ export function drawMap(
       colorScheme = d3.schemeReds[3];
       break;
   }
-  //console.log("dimension", dimension, MapMeanArray);
   // create the map projection and geoPath
   let projection = d3
     .geoMercator()
@@ -196,9 +199,7 @@ export function drawMap(
       return d.properties.Id;
     })
     .attr("fill", (d) => {
-      //let val = +Math.floor(Math.random() * (10 - 0 + 1)) + 0;
       let val = MapMeanArray[d.properties.Id];
-      //console.log(val, colorScale(val));
       return colorScale(val);
     })
     .attr("stroke", "black")
@@ -227,8 +228,6 @@ export function drawMap(
       tooltpdiv.transition().duration("50").style("opacity", 0);
     })
     .on("click", function (d) {
-      console.log("Modal Clicked");
-
       clickedCity = d.properties.Id;
       updateData(clickedCity)
       Window.city = d.properties.Nbrhood;
@@ -253,7 +252,6 @@ export function drawMap(
       return d.properties.Id;
     });
 
-  console.log("Hos", Hospitals, Bridges);
   //Display Hospitals
   mapSvg
     .selectAll(".map-hospitals")
@@ -339,7 +337,7 @@ export function drawMap(
     mapSvg.selectAll(".map-bridges").classed("displaynone", true);
   }
 
-  var keys = ["low", "Medium", "High"];
+  var keys = ["Low", "Medium", "High"];
   // Add one dot in the legend for each name.
   var size = 20;
   mapSvg
@@ -374,7 +372,7 @@ export function drawMap(
     })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
-  var certainity = ["uncertain", "certain", "Highly certain"];
+  var certainity = ["Uncertain", "Certain", "Highly Certain"];
   mapSvg
     .selectAll("certainitydots")
     .data(certainity)
@@ -409,4 +407,17 @@ export function drawMap(
     })
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle");
+}
+
+function applySelectedClassToButton(selectedButtonId) {
+  let buttonsIds = ["map-power", "map-buildings", "map-medical", "map-shake", "map-sewer", "map-roads"];
+  buttonsIds.forEach(buttonId => {
+    if (buttonId == selectedButtonId) {
+      document.getElementById(buttonId).classList.add("selected-button");
+    }
+    else {
+      document.getElementById(buttonId).classList.remove("selected-button");
+    }
+  })
+
 }
