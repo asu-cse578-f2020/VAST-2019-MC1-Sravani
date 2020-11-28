@@ -79,7 +79,7 @@ function drawDensityChart(data) {
     .append("g")
     .attr("transform", "translate(100," + (height + 150) + ")")
     .call(d3.axisBottom(x)
-    .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
+      .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
     );
 
   densityChartSvg.append("text")
@@ -90,7 +90,6 @@ function drawDensityChart(data) {
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .style("font-size", "0.9em")
-    .style("font-weight", "bold")
     .text(`Log 11 value of`);
 
   densityChartSvg.append("text")
@@ -101,7 +100,6 @@ function drawDensityChart(data) {
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .style("font-size", "0.9em")
-    .style("font-weight", "bold")
     .text("number of reports");
 
 
@@ -112,7 +110,6 @@ function drawDensityChart(data) {
       (1.1 * height + margin.top + 150) + ")")
     .style("text-anchor", "middle")
     .style("font-size", "0.9em")
-    .style("font-weight", "bold")
     .text("Time");
 
   // Add Y axis
@@ -129,6 +126,28 @@ function drawDensityChart(data) {
     .append("g")
     .attr("transform", "translate(100,150)")
     .call(d3.axisLeft(y));
+
+  densityChartSvg.append("text")
+    .attr("transform", "translate(" + (width + 300) + " ," + (height + 20) + ")")
+    .style("font-size", "0.9em")
+    .text("Number of Reports: Respective Y scale");
+
+  densityChartSvg.append("text")
+    .attr("transform", "translate(" + (width + 300) + " ," + (height + 50) + ")")
+    .style("font-size", "0.9em")
+    .text("100 report count: 1.92");
+
+  densityChartSvg.append("text")
+    .attr("transform", "translate(" + (width + 300) + " ," + (height + 70) + ")")
+    .style("font-size", "0.9em")
+    .text("1000 report count: 2.88");
+
+  densityChartSvg.append("text")
+    .attr("transform", "translate(" + (width + 300) + " ," + (height + 90) + ")")
+    .style("font-size", "0.9em")
+    .text("3000 report count: 3.33");
+
+
 
   brush = d3
     .brushX()
@@ -213,7 +232,6 @@ function drawDensityChart(data) {
   function brushmoved() {
     let userSelect = false;
     if (brushFlag == 0) {
-      // console.log("user selected time");
       userSelect = true;
       document.getElementById("playbtn").classList.remove("selected-button");
       document.getElementById("pausebtn").classList.remove("selected-button");
@@ -221,9 +239,7 @@ function drawDensityChart(data) {
     }
     brushFlag = 0;
 
-    // console.log("BRUSH MOVED");
     var s = d3.event.selection;
-    // console.log("here", s);
 
     if (s == null) {
       handle.attr("display", "none");

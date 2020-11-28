@@ -78,7 +78,6 @@ def get_entropy_by_category(category, t1, t2):
         dist = [x/sum(bases.values()) for x in bases.values()]
         entropy_value = entropy(dist, base=11)
         locations_timelyAverage.append([group_name, entropy_value])
-
     df = pd.DataFrame(locations_timelyAverage)
     return df
 
@@ -97,7 +96,6 @@ def get_damage(t1, t2):
             temp_category=nba_location.get_group(group_name).dropna(subset=[category])
             locations_timelyAverage.append([group_name,category,temp_category[category].mean()])
             df=pd.DataFrame(locations_timelyAverage)
-            
     return df
 
 
@@ -109,12 +107,9 @@ def get_report_count():
 
 
 def get_reports_n_damage_by_location(loc):
-
     nba_time = nba.groupby(nba.location, as_index=False)
     location = nba_time.get_group(loc)
     temp = location.groupby(pd.Grouper(level='time', freq='3h')).agg(power=('power', 'mean'), medical=('medical', 'mean'), sewer_and_water=(
         'sewer_and_water', 'mean'), roads_and_bridges=('power', 'mean'), buildings=('buildings', 'mean'), shake_intensity=('shake_intensity', 'mean'), count=('time', 'count'))
     temp.reset_index(level=0, inplace=True)
-    
-    # temp.to_excel(str(loc)+'_sp.xlsx')
     return temp
