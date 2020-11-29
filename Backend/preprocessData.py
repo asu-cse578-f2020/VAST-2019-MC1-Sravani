@@ -73,10 +73,12 @@ def get_entropy_by_category(category, t1, t2):
     for group_name, location in nba_location:
         temp_category = nba_location.get_group(
             group_name).dropna(subset=[category])
-        bases = collections.Counter(
-            [tmp_base for tmp_base in temp_category[category]])
-        dist = [x/sum(bases.values()) for x in bases.values()]
-        entropy_value = entropy(dist, base=11)
+        if temp_category.empty:
+            entropy_value=None          
+        else:   
+            bases = collections.Counter([tmp_base for tmp_base in temp_category[category]])
+            dist = [x/sum(bases.values()) for x in bases.values()]
+            entropy_value = entropy(dist, base=11)
         locations_timelyAverage.append([group_name, entropy_value])
     df = pd.DataFrame(locations_timelyAverage)
     return df
