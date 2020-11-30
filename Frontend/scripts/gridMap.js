@@ -34,6 +34,7 @@ export function plotGridMap(startInterval, endInterval) {
     "sewer_and_water",
     "roads_and_bridges",
   ];
+  gridSvg.selectAll("*").remove();
   var sEnter = gridSvg
     .append("g")
     .selectAll("g")
@@ -80,7 +81,6 @@ export function plotGridMap(startInterval, endInterval) {
     getDataForAllCategories(changedTimestamps[4], changedTimestamps[5]),
     getDataForAllCategories(changedTimestamps[5], changedTimestamps[6]),
   ]).then(function (values) {
-    gridMapSvg.selectAll("text").remove();
     for (let i = 0; i < values.length; i++) {
       let data = values[i];
       data0[i] = data[1];
@@ -147,7 +147,7 @@ export function plotGridMap(startInterval, endInterval) {
           .style("stroke-width", 0.5)
           .on("mouseover", function () {
             divTooltip
-              .html("City : Palace Hills")
+              .html("Neighborhood : Palace Hills")
               .style("left", d3.event.pageX + 10 + "px")
               .style("top", d3.event.pageY - 20 + "px")
               .style("opacity", 1);
@@ -173,6 +173,17 @@ export function plotGridMap(startInterval, endInterval) {
         .attr("y", 555)
         .text(changedTimestamps[b]);
     }
+    for (let f = 0; f < 7; f++) {
+      legendSvg
+        .append("text")
+        .style("font-size", "12px")
+        .style("text-anchor", "middle")
+        .attr("x", f * 24 + 4)
+        .attr("y", 35)
+        .text(function (d) {
+          return Math.round(f * 1.66);
+        });
+    }
     subrect
       .append("text")
       .attr("transform", "rotate(90 " + (115 + 6 * 25) + " " + 555 + ")")
@@ -191,47 +202,61 @@ export function plotGridMap(startInterval, endInterval) {
       .attr("x", 200)
       .attr("y", 870)
       .text("Palace Hills");
+    for (let i = 0; i < mapData.length; i++) {
+      gridSvg
+        .append("line")
+        .style("stroke", "black")
+        .style("stroke-width", 4)
+        .attr("x1", 150 * mapData[i].x + 150)
+        .attr("y1", 150 * mapData[i].y + 100)
+        .attr("x2", 150 * mapData[i].x + 150)
+        .attr("y2", 150 * mapData[i].y + 250);
+    }
+
+    for (let w = 0; w < mapData.length; w++) {
+      gridSvg
+        .append("line")
+        .style("stroke", "black")
+        .style("stroke-width", 4)
+        .attr("x1", 150 * mapData[w].x)
+        .attr("y1", 150 * mapData[w].y + 250)
+        .attr("x2", 150 * mapData[w].x + 150)
+        .attr("y2", 150 * mapData[w].y + 250);
+    }
+    sEnter
+      .append("rect")
+      .attr("width", 150)
+      .attr("height", 150)
+      .attr("vector-effect", "non-scaling-stroke")
+      .style("stroke", "black")
+      .style("stroke-width", 6)
+      .style("fill", function (d) {
+        return "white";
+      })
+      .attr("transform", "translate(0,100)");
   });
 
-  for (let i = 0; i < mapData.length; i++) {
-    gridSvg
-      .append("line")
+  let legendSvg = d3
+    .select("#gridmap")
+    .append("svg")
+    .attr("x", 120)
+    .attr("y", 900);
+  for (let i = 0; i < 6; i++) {
+    legendSvg
+      .append("rect")
+      .attr("width", 25)
+      .attr("height", 25)
+      .attr("transform", function () {
+        return "translate(" + i * 25 + "," + 0 + ")";
+      })
+      .style("fill", colorScale(i * 1.66))
       .style("stroke", "black")
-      .style("stroke-width", 4)
-      .attr("x1", 150 * mapData[i].x + 150)
-      .attr("y1", 150 * mapData[i].y + 100)
-      .attr("x2", 150 * mapData[i].x + 150)
-      .attr("y2", 150 * mapData[i].y + 250);
+      .style("stroke-width", 0.5);
   }
-
-  for (let w = 0; w < mapData.length; w++) {
-    gridSvg
-      .append("line")
-      .style("stroke", "black")
-      .style("stroke-width", 4)
-      .attr("x1", 150 * mapData[w].x)
-      .attr("y1", 150 * mapData[w].y + 250)
-      .attr("x2", 150 * mapData[w].x + 150)
-      .attr("y2", 150 * mapData[w].y + 250);
-  }
-
-  sEnter
-    .append("rect")
-    .attr("width", 150)
-    .attr("height", 150)
-    .attr("vector-effect", "non-scaling-stroke")
-    .style("stroke", "black")
-    .style("stroke-width", 6)
-    .style("fill", function (d) {
-      return "white";
-    })
-    .attr("transform", "translate(0,100)");
 
   let currentCity = "";
-  let EventsCity="";
-  let ConstructionsCity="";
   gridSvg
-    .selectAll("svg")
+    .select("svg")
     .on("mouseover", function () {
       let x = d3.event.pageX;
       let y = d3.event.pageY - 1400;
@@ -240,28 +265,15 @@ export function plotGridMap(startInterval, endInterval) {
         let mapy = mapData[h].y * 150;
         if (x > mapx && y > mapy && x < mapx + 150 && y < mapy + 150) {
           currentCity = mapData[h].enName;
-          EventsCity=mapData[h].Events;
-          ConstructionsCity=mapData[h].Constructions;
-          document.getElementById("event").innerHTML = EventsCity;
-          document.getElementById("construction").innerHTML = ConstructionsCity;
-
         }
       }
       divTooltip
-        .html("City : " + currentCity)
+        .html("Neighborhood : " + currentCity)
         .style("left", d3.event.pageX + 10 + "px")
         .style("top", d3.event.pageY - 20 + "px")
         .style("opacity", 1);
     })
     .on("mouseout", function (d, i) {
       divTooltip.style("opacity", 0);
-      document.getElementById("event").innerHTML = "";
-          document.getElementById("construction").innerHTML = "";
     });
-
-  sEnter
-    .append("text")
-    .attr("x", 150 / 2)
-    .attr("y", 150 / 2 + 2)
-    .style("text-anchor", "middle");
 }
