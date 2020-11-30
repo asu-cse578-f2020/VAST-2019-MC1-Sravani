@@ -1,6 +1,6 @@
-//import { convertDateToTimeStamp, getDataForAllCategories } from './utils.js';
 var svg;
 var stackedBarChartData = [];
+var stackedbartooltip;
 
 var margin = { top: 30, right: 30, bottom: 30, left: 50 },
   width = 460 - margin.left - margin.right,
@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
   svg = d3.select('#stackedbarchart')
   svg.attr("width", (width + margin.left + margin.right))
     .attr("height", height + margin.top + margin.bottom);
+  stackedbartooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 });
 
 
@@ -106,11 +110,6 @@ function drawStackedBarChart(data) {
       d3.select(this).style("font-size", 16);
     });
 
-  var tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
   let legend = svg.append('g')
     .attr("transform", `translate(${margin.left},${0})`)
 
@@ -154,18 +153,16 @@ function drawStackedBarChart(data) {
     .attr("transform", `translate(${margin.left},${margin.top + 85})`)
     .style("cursor", "pointer")
     .on('mouseover', function (d, i) {
-      tooltip.style('class', '.tooltip')
-        .text(function () {
-          return `${getCategoryNameFromKey(d.key)}: ` + (`${(d[1] - d[0]).toFixed(2)}`) + "\nTotal Damage Intensity: " + (`${(d.data.total).toFixed(2)}`);
-        })
-        .style('opacity', 1)
+      stackedbartooltip.style('class', '.tooltip').text(function () {
+        return `${getCategoryNameFromKey(d.key)}: ` + (`${(d[1] - d[0]).toFixed(2)}`) + "\nTotal Damage Intensity: " + (`${(d.data.total).toFixed(2)}`);
+      }).style('opacity', 1)
         .style("left", (d3.event.pageX + 10) + "px")
         .style("top", (d3.event.pageY - 30) + "px")
 
     })
     .on('mousemove', function (d, i) { })
     .on('mouseout', function (d, i) {
-      tooltip.style('opacity', 0)
+      stackedbartooltip.style('opacity',0);
     });
 }
 
