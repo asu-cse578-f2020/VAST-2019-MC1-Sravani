@@ -78,11 +78,10 @@ function drawDensityChart(data) {
   densityChartSvg
     .append("g")
     .attr("transform", "translate(100," + (height + 150) + ")")
-    .call(d3.axisBottom(x)
-      .tickFormat(d3.timeFormat("%b-%d-%Y %H:%M"))
-    );
+    .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b-%d-%Y %H:%M")));
 
-  densityChartSvg.append("text")
+  densityChartSvg
+    .append("text")
     .attr("class", "ylabel")
     .attr("transform", "rotate(-90)")
     .attr("y", 30)
@@ -92,7 +91,8 @@ function drawDensityChart(data) {
     .style("font-size", "0.9em")
     .text(`Log 11 value of`);
 
-  densityChartSvg.append("text")
+  densityChartSvg
+    .append("text")
     .attr("class", "ylabel")
     .attr("transform", "rotate(-90)")
     .attr("y", 50)
@@ -102,12 +102,17 @@ function drawDensityChart(data) {
     .style("font-size", "0.9em")
     .text("number of reports");
 
-
-  densityChartSvg.append("text")
+  densityChartSvg
+    .append("text")
     .attr("class", "xlabel")
-    .attr("transform",
-      "translate(" + (width / 1.35) + " ," +
-      (1.1 * height + margin.top + 150) + ")")
+    .attr(
+      "transform",
+      "translate(" +
+        width / 1.35 +
+        " ," +
+        (1.1 * height + margin.top + 150) +
+        ")"
+    )
     .style("text-anchor", "middle")
     .style("font-size", "0.9em")
     .text("Time");
@@ -127,27 +132,41 @@ function drawDensityChart(data) {
     .attr("transform", "translate(100,150)")
     .call(d3.axisLeft(y));
 
-  densityChartSvg.append("text")
-    .attr("transform", "translate(" + (width + 300) + " ," + (height + 20) + ")")
+  densityChartSvg
+    .append("text")
+    .attr(
+      "transform",
+      "translate(" + (width + 270) + " ," + (height + 20) + ")"
+    )
     .style("font-size", "0.9em")
     .text("Number of Reports: Respective Y scale");
 
-  densityChartSvg.append("text")
-    .attr("transform", "translate(" + (width + 300) + " ," + (height + 50) + ")")
+  densityChartSvg
+    .append("text")
+    .attr(
+      "transform",
+      "translate(" + (width + 300) + " ," + (height + 50) + ")"
+    )
     .style("font-size", "0.9em")
     .text("100 report count: 1.92");
 
-  densityChartSvg.append("text")
-    .attr("transform", "translate(" + (width + 300) + " ," + (height + 70) + ")")
+  densityChartSvg
+    .append("text")
+    .attr(
+      "transform",
+      "translate(" + (width + 300) + " ," + (height + 70) + ")"
+    )
     .style("font-size", "0.9em")
     .text("1000 report count: 2.88");
 
-  densityChartSvg.append("text")
-    .attr("transform", "translate(" + (width + 300) + " ," + (height + 90) + ")")
+  densityChartSvg
+    .append("text")
+    .attr(
+      "transform",
+      "translate(" + (width + 300) + " ," + (height + 90) + ")"
+    )
     .style("font-size", "0.9em")
     .text("3000 report count: 3.33");
-
-
 
   brush = d3
     .brushX()
@@ -251,8 +270,25 @@ function drawDensityChart(data) {
       var sx = s.map(x.invert);
       let date1 = new Date(sx[0]);
       let date2 = new Date(sx[1]);
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      document.getElementById('selectedtime').innerHTML = `<b>${months[date1.getMonth()]} ${date1.getDate()} ${date1.getFullYear()} ${date1.getHours()}:${date1.getMinutes()}:${date1.getSeconds()}</b> to <b>${months[date2.getMonth()]} ${date2.getDate()} ${date2.getFullYear()} ${date2.getHours()}:${date2.getMinutes()}:${date2.getSeconds()}</b>`;
+      let months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      document.getElementById("selectedtime").innerHTML = `<b>${
+        months[date1.getMonth()]
+      } ${date1.getDate()} ${date1.getFullYear()} ${date1.getHours()}:${date1.getMinutes()}:${date1.getSeconds()}</b> to <b>${
+        months[date2.getMonth()]
+      } ${date2.getDate()} ${date2.getFullYear()} ${date2.getHours()}:${date2.getMinutes()}:${date2.getSeconds()}</b>`;
       let ts1 = convertDateToTimeStamp(date1);
       let ts2 = convertDateToTimeStamp(date2);
       if (userSelect) {
