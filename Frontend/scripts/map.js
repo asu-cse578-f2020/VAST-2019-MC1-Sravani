@@ -212,8 +212,8 @@ export function drawMap(
       let entropyVal = MapEntropyArray[d.properties.Id];
       if (!entropyVal && entropyVal != 0) return 2;
       if (entropyVal >= 0 && entropyVal <= 0.4) return 6;
-      if (entropyVal >= 0.5 && entropyVal <= 0.7) return 3;
-      if (entropyVal >= 0.8) return 0.3;
+      if (entropyVal > 0.4 && entropyVal <= 0.7) return 3;
+      if (entropyVal > 0.7) return 0.3;
     })
     .style("stroke-dasharray", function (d) {
       let entropyVal = MapEntropyArray[d.properties.Id];
