@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //yScale
   y = d3.scaleLinear().range([height, 0]);
-
+ 
   //radiusScale
   radiusScale = d3.scaleSqrt();
   var lx = getClickedCity();
@@ -72,11 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       y.domain([0, 10]);
-      svg
-        .append("g")
-        .attr("class", "x_axis")
-        .attr("transform", "translate(100," + (height + 150) + ")")
-        .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b-%d-%Y %H:%M")));
+      
 
       svg
         .append("g")
@@ -227,6 +223,24 @@ export function updateData(loc) {
           .attr("dy", "1em")
           .style("font-size", "1.1em")
           .text(`City: `);
+          
+          svg.append("text")
+    
+    .attr("transform",
+      "translate(" + (width +150) + " ," +
+      (1.2 * height + margin.top + 100) + ")")
+    .style("text-anchor", "middle")
+    .text("Time");
+
+          svg
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 40)
+          .attr("x", 0 - (height ))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("Damage Ratings")
+          ;
         svg
           .append("text")
           .attr("x", 190)
