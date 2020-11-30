@@ -218,11 +218,11 @@ export function updateData(loc) {
         )[0];
         svg
           .append("text")
-          .attr("x", 150)
+          .attr("x", 60)
           .attr("y", 40)
           .attr("dy", "1em")
           .style("font-size", "1.1em")
-          .text(`City: `);
+          .text(`Neighbourhood: `);
           
           svg.append("text")
     
