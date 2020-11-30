@@ -28,6 +28,9 @@ html {
 #gridmap {
   width: 99%;
 }
+p.invview {
+  text-align: center;
+}
 
 h2,
 h3,

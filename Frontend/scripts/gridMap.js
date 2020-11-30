@@ -228,16 +228,23 @@ export function plotGridMap(startInterval, endInterval) {
     .attr("transform", "translate(0,100)");
 
   let currentCity = "";
+  let EventsCity="";
+  let ConstructionsCity="";
   gridSvg
     .selectAll("svg")
     .on("mouseover", function () {
       let x = d3.event.pageX;
-      let y = d3.event.pageY - 1200;
+      let y = d3.event.pageY - 1400;
       for (let h = 0; h < mapData.length; h++) {
         let mapx = mapData[h].x * 150;
         let mapy = mapData[h].y * 150;
         if (x > mapx && y > mapy && x < mapx + 150 && y < mapy + 150) {
           currentCity = mapData[h].enName;
+          EventsCity=mapData[h].Events;
+          ConstructionsCity=mapData[h].Constructions;
+          document.getElementById("event").innerHTML = EventsCity;
+          document.getElementById("construction").innerHTML = ConstructionsCity;
+
         }
       }
       divTooltip
@@ -248,6 +255,8 @@ export function plotGridMap(startInterval, endInterval) {
     })
     .on("mouseout", function (d, i) {
       divTooltip.style("opacity", 0);
+      document.getElementById("event").innerHTML = "";
+          document.getElementById("construction").innerHTML = "";
     });
 
   sEnter
