@@ -150,6 +150,10 @@ export function drawMap(
   mapSvg.selectAll(".map-bridges").remove();
   mapSvg.selectAll(".map-schools").remove();
   mapSvg.selectAll(".map-power").remove();
+  mapSvg.selectAll(".mydots").remove();
+  mapSvg.selectAll(".mylabels").remove();
+  mapSvg.selectAll(".certainitydots").remove();
+  mapSvg.selectAll(".certainitylabels").remove();
 
   //let checkeddimension =  d3.select('input').property('checked');
   var colorScheme;
@@ -353,6 +357,7 @@ export function drawMap(
     .data(keys)
     .enter()
     .append("rect")
+    .attr("class", "mydots")
     .attr("x", 50)
     .attr("y", function (d, i) {
       return 320 + i * (size + 5);
@@ -371,6 +376,7 @@ export function drawMap(
     .data(keys)
     .enter()
     .append("text")
+    .attr("class", "mylabels")
     .attr("x", 50 + size * 1.2)
     .attr("y", function (d, i) {
       return 320 + i * (size + 5) + size / 2;
@@ -386,6 +392,7 @@ export function drawMap(
     .data(certainity)
     .enter()
     .append("rect")
+    .attr("class", "certainitydots")
     .attr("x", 50)
     .attr("y", function (d, i) {
       return 450 + i * (size + 7);
@@ -410,6 +417,7 @@ export function drawMap(
     .data(certainity)
     .enter()
     .append("text")
+    .attr("class", "certainitylabels")
     .attr("x", 50 + size * 1.2)
     .attr("y", function (d, i) {
       return 450 + i * (size + 7) + size / 2;
