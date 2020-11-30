@@ -67,6 +67,7 @@ function drawStackedBarChart(data) {
     .domain(["power", "buildings", "medical", "shake_intensity", "sewer_and_water", "roads_and_bridges"])
     .range(["rgb(252, 146, 114)", "rgb(158, 202, 225)", "rgb(161, 217, 155)", "rgb(188, 189, 220)", "rgb(253, 174, 107)", "rgb(201, 148, 199)"]);
 
+  svg.selectAll("rect").remove();
   svg.select('.yaxis').remove();
   svg.select('.xaxis').remove();
   svg.select('.ylabel').remove();
