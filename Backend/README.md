@@ -1,24 +1,36 @@
-***** Running first time ****
-
-    pip install -r requirements.txt
+**Running first time**
+```bash
+pip install -r requirements.txt
     (or)
-    py -3 -m pip install -r requirements.txt
+py -3 -m pip install -r requirements.txt
+```
+
+  
 ---------------------------------------------------------------------------------------
 
-***** Every time *****
+**Every time**
 
 To run the backend:
 
-    i) Open terminal in the root project directory VAST-2019-MC1-Sravani and Change directory to the Backend from the root directory   i.e., VAST-2019-MC1-Sravani using the following command:
-       cd Backend
-    ii) Now start the flask server using the following command:
-        flask run 
-        (or)
-        py -3 -m flask run
-        depending on your configuration
-    iii) Now, we should see a message "Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)" which indicates the successful start of the flask server. Keep this terminal running and proceed with the next steps.
-    iV) Some environments (like Mac) may ask to set the FLASK_APP environment variable explicitly. In that case set the environment variable using below commands before step (ii).
-        export FLASK_APP=app.py
+i) Open terminal in the root project directory VAST-2019-MC1-Sravani and Change directory to the Backend from the root directory   i.e., VAST-2019-MC1-Sravani using the following command:
+```bash
+cd Backend
+```
+
+
+        
+ii) Now start the flask server using the following command     depending on your configuration:
+```bash
+flask run 
+   (or)
+py -3 -m flask run
+```
+iii) Now, we should see a message **"Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)"** which indicates the successful start of the flask server. Keep this terminal running and proceed with the next steps.
+
+iv) Some environments (like Mac) may ask to set the FLASK_APP environment variable explicitly. In that case set the environment variable using below commands before step (ii).
+```bash
+export FLASK_APP=app.py
+```
 
 ----------------------------------------------------------------------------------------
 
